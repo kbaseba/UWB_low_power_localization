@@ -6,25 +6,19 @@ There is no current approach for completely battery-free real-time localization 
 
 ### Splash images
 
-### 
 
-### 
-
-### 
-
-### 
 
 ### Project git repo(s):
 
 Example: [https://github.com/shushuai3/multi-robot-localization?tab=readme-ov-file](https://github.com/shushuai3/multi-robot-localization?tab=readme-ov-file)
 
-Our Repository: https://github.com/kbaseba/UWB_low_power_localization
+Our Repository: https://github.com/kbaseba/UWB_low_power_localization/tree/main
 
 ## Big picture
 
 ### What is the overall problem that this and related research is trying to solve?
 
-Battery-free autonomous robots such as the MilliMobile and Origami Microfliers, capable of operating on harvested solar and RF power, challenge the conventional notion that motion and actuation are beyond the capabilities of battery-free devices \[1,2\]. Through miniaturizing robots to the gram scale and enabling intermittent capacitor discharge to control locomotion, these robots can operate fully autonomously on as little as 50 μW of power or less \[1\]. While capable of aerial and land locomotion, these robots currently lack navigation and feedback control \[1\]. There are significant opportunities to enhance networking capabilities, establishing connectivity between these robots to enable large-scale swarms of battery-free robotic sensor nodes \[1\].
+Battery-free autonomous robots such as the MilliMobile and Origami Microfliers, capable of operating on harvested solar and RF power, challenge the conventional notion that motion and actuation are beyond the capabilities of battery-free devices [1,2]. Through miniaturizing robots to the gram scale and enabling intermittent capacitor discharge to control locomotion, these robots can operate fully autonomously on as little as 50 μW of power or less [1]. While capable of aerial and land locomotion, these robots currently lack navigation and feedback control [1]. There are significant opportunities to enhance networking capabilities, establishing connectivity between these robots to enable large-scale swarms of battery-free robotic sensor nodes [1].
 
 ### Why should people (everyone) care about the problem?
 
@@ -66,11 +60,13 @@ We can map out the exploration of the robotic swarms and quantitatively see how 
 
 ## Background / related work / references
 
+Located in ./doc/References
+
 ## System capabilities, validation deliverables, engineering tasks
 
 ### Concrete external deadlines (paper submissions):
 
-Include dates as well as target proposed title / abstract for expected submission
+\<TODO: discuss potential venues\>
 
 ### Detailed schedule (weekly capabilities / deliverables / tasks):
 
@@ -84,29 +80,32 @@ Include dates as well as target proposed title / abstract for expected submissio
 **TASKS: 6-7? Weeks of ACTUAL work, 1-2 for presentation & submission**
 
 1. Research of problem statement and related areas  
-   1. UWB  
-   2. Localization techniques/algorithms in general  
-   3. Hardware components and constraints (power, current, solar power generation)  
-   4. Hardware cost  
 2. High-level block diagram of the system design. (General)  
-   1. Literature review  
-   2. Algorithm creation  
-   3. Understanding component selection and constraints  
-   4. Localization techniques  
-3. Begin code implementation directly based on block diagram  
-4. Test simulation  
-5. If testing is validated to our satisfaction, begin implementing algorithms on hardware  
+3. Initial code implementation directly based on block diagram  
+   1. Software-begin coding directly reflecting block diagram  
+   2. Hardware-begin testing components power and current draw/generation for real-world constraints to input into the system  
+4. Testing simulation/begin hardware implementation  
+   1. Software-generate results for simulation  
+      1. Generate multiple (monte-carlo) gridworld plot (video) that shows (given the real-world constraints) the motion of the robotic nodes as they explore a simulated environment. Shows when a robot dies, communication patterns, potential power levels, communication platform (UWB, vs BLE) etc  
+   2. Hardware-begin implementing firmware  
+5. Further software simulation to validate hypothesis, finish firmware algorithm implementation  
 6. Test hardware application (real-world test)  
-7. Presentation and submission preparation (also whatever tasks bleed over from previous weeks can be completed here)
+7. Presentation and submission preparation (also whatever tasks bleed over from previous weeks can be completed here)  
+8. Paper writing
 
-| Start Date | Goals | Tasks | Deliverables |
+| Start Date | Capabilities | Tasks | Deliverables |
 | :---: | ----- | ----- | ----- |
-| Week 4 (10/21) | **Software**:  **Hardware**:  **General**: Literature review, code base setup, hardware component selection  | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General**:   |
-| Week 5 (10/28) | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General:**  | **Software**:  **Hardware**:  **General:**  |
-| Week 6 (11/04) | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General:**  | **Software**:  **Hardware**:  **General:**  |
-| Week 7 (11/11) | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General:**  | **Software**:  **Hardware**:  **General:**  |
-| Week 8 (11/18) | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General:**  | **Software**:  **Hardware**:  **General:**  |
-| Week 9 (11/25) | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General:**  | **Software**:  **Hardware**:  **General:** Teaser video submission before 4 PM on **11/29** |
-| Week 10 (12/02) | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General**:  | **Software**:  **Hardware**:  **General:** 16 minute project presentation before 4 PM on **12/06** |
-| Week 11 (12/09) | Final paper writing | Complete the write-up by Thursday | \-Project demo in class on **12/10** \-Submit final write up by **(12/13)** |
+| Week 4 (10/21) | **Software**: Personal understanding of background material, ideas for system implementation **Hardware**: Personal understanding of background material, ideas for system implementation **General**: Create and update code base. Establish branches for development. | **Software**: Understand reference material and current state of the art algorithms in relation to localization techniques **Hardware**: Understand reference material and current state of the art localization technology **General**: Establish Github repository | **Software**: Google Doc literature review of current localization algorithms as it relates to this project and generate summary of implementation idea **Hardware**:  **General**: Google Doc literature review of current localization technology-generate summary of implementation idea  |
+| Week 5 (10/28) | **General**: System block diagram | **General:** Based upon individual literature review individually generate system design ideas, meet to generate a system plan based on individual research and cited work, Justify validity of potential solution | **General:** In-depth block diagram of the entire system, with all inputs/outputs needed for each block. Each block represents a class, each class has an initialization and update function. |
+| Week 6 (11/04) | **Software**: Initial code implementation **Hardware**: Component test results | **Software**: Based upon block diagram, implement codes/classes for system **Hardware**: Test the hardware components purchased in the previous week, and maintain a record of results. Setup the code environment and understand the microcontroller. | **Software**: Updated code base with initial implementation of block diagram **Hardware**: Based upon measurement, constrain the simulation capabilities. Firmware environment setup |
+| Week 7 (11/11) | **Software**:  **Hardware**:  **General**: Re-evaluate status and update calendar accordingly | **Software**: Generate results for simulation **Hardware**: Begin firmware implementation **General**: Re-evaluate status and update calendar accordingly | **Software**: Generate multiple (monte-carlo) gridworld plot (video) that shows (given the real-world constraints) the motion of the robotic nodes as they explore a simulated environment. Shows when a robot dies, communication patterns, potential power levels, communication platform (UWB, vs BLE) etc. **Hardware**: Establish communication between nodes and generate measurements for power and current draw. **General:** Re-evaluate status and update calendar accordingly |
+| Week 8 (11/18) | **Software**: Further testing of simulation and assisting with firmware development **Hardware**: Completed firmware for hardware application **General**: Plans for teaser video | **Software**: Based upon previous results, further test system. Generate more plots/videos for tentative results. Aso assist with firmware code implementation **Hardware**: Complete code implementation **General:** Start making the teaser video | **Software**: More test results (plots-videos) that show node motion in the environment given the constraints. Firmware implementation **Hardware**: Validate firmware implementation through real-world test using a few microcontrollers and measure constraints (power, current drawn, voltage, etc) **General:** Initial teaser video |
+| Week 9 (11/25) | **General**: Real-world test of hardware/firmware, demonstrating validity of hypothesis (video for this) | **General:** Real-world testing on microcontrollers. Complete making the teaser video | **General:** Teaser video submission before 4 PM on **11/29** |
+| Week 10 (12/02) | **General**: A thorough and concise presentation on our work done in the last 6 weeks. | **General**: Complete the entire presentation, including relevant figures, video clips, plots, code snippets | **General:** 16 minute project presentation before 4 PM on **12/06** |
+| Week 11 (12/09) | **General:** Final paper that is professional enough for conferences | **General:** Complete the write-up by Thursday **(12/12)** | **General:** Project demo in class on **12/10** \-Submit final write up by **(12/13)** |
+
+**Important dates:**
+
+Renish \- 11/06 (2 Midterms) ; 12/09 (1 Final)  
+Tilboon \- 10/30 (1 Midterm) ; 12/04 (1 Final)
 
