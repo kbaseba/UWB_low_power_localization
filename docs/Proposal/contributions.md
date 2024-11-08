@@ -5,16 +5,20 @@
 ### Motivation
 *What is a specific problem that we'd currently like to solve, but can't with the existing science?*
 
-Centimeter-level localization for battery-free autonomous robot swarms.
+Centimeter-level localization and environment exploration for battery-free autonomous robot swarms.
 
 ### Contribution
 *What is the additional knowledge that would enable that problem to be solved?*
 
 - How can insect-scale robots achieve localization with sub-milliwatt power using only onboard components?
-- Can large swarms improve localization range and accuracy via mesh networking protocols?
+- Does inter-swarm communication methods improve exploration efficiency given individual power constraints?
+    - Inter robot communication vs centralized communication hub
 - How can UWB localization be duty-cycled and integrated with BLE to maximize power efficiency?
+    - Dynamic leader nodes
+- How do we effectively estimate the state of nodes given the low frequency of localization
+    - Onboard vs. Hub
+    - Kalman Filtering, etc.
 - What path planning algorithm best balances power harvesting with optimal landscape coverage?
-- What is the optimal deployment strategy for anchor nodes to support localization and navigation in swarms?
 
 ### Results
 *What data will be necessary to capture and communicate that new knowledge?  That is, what data will demonstrate:*
@@ -45,6 +49,7 @@ The experiment will use a **2D gridworld simulation**, dividing the landscape in
 - **Light Intensity**: Simulates power harvesting capability.
 - **Anchor Node Placement**: Different anchor patterns and densities.
 - **Communication Frequency**: Duty cycling for UWB/BLE.
+- **Environment Complexity**: Number and shape of objects, including shadows.
 
 ##### General Experiment Setup
 
@@ -52,6 +57,7 @@ The experiment will use a **2D gridworld simulation**, dividing the landscape in
 - **Anchor Placement**: Experiment with anchor patterns and densities to optimize localization precision.
 - **Energy Availability**: Adjust light intensity to simulate varying power availability per sector.
 - **Duty Cycling**: Test different UWB/BLE duty cycles to balance power efficiency and localization needs.
+- **Environment Complexity**: Adjust the number and shape of obstacles, and vary the light intensity profiles (shadows).
 
 ##### Baseline Test Setup
 
@@ -65,7 +71,7 @@ The baseline test will use **fixed settings**:
 
 1. **Localization Accuracy**: Measure average localization error (cm) across configurations by varying **node density** and **anchor placements**.
 
-2. **Power Consumption**: Record per-cycle power usage (<1mW) by testing **duty cycles** and **light intensity**.
+2. **Power Consumption**: Record per-cycle power usage (<1mW).
 
 3. **Localization Range**: Determine maximum range with centimeter accuracy under different node densities and anchor configurations.
 
@@ -74,7 +80,3 @@ The baseline test will use **fixed settings**:
 5. **Path Planning Efficiency**: Use light intensity and duty cycles to track area coverage (%) and energy consumption, assessing path planning efficiency.
 
 6. **Control Comparisons**: Run baseline tests to benchmark localization accuracy, range, and power usage, validating improvements from optimized configurations.
-
-
-## Contributions 1a, 1b, 2, 2a, ...
-*(same as above)*
