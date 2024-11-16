@@ -3,24 +3,27 @@
 ## Contribution 1
 
 ### Motivation
+
 *What is a specific problem that we'd currently like to solve, but can't with the existing science?*
 
 Centimeter-level localization and environment exploration for battery-free autonomous robot swarms.
 
 ### Contribution
+
 *What is the additional knowledge that would enable that problem to be solved?*
 
 - How can insect-scale robots achieve localization with sub-milliwatt power using only onboard components?
 - Does inter-swarm communication methods improve exploration efficiency given individual power constraints?
-    - Inter robot communication vs centralized communication hub
+  - Inter robot communication vs centralized communication hub
 - How can UWB localization be duty-cycled and integrated with BLE to maximize power efficiency?
-    - Dynamic leader nodes
+  - Dynamic leader nodes
 - How do we effectively estimate the state of nodes given the low frequency of localization
-    - Onboard vs. Hub
+  - Onboard vs. Hub
     - Kalman Filtering, etc.
 - What path planning algorithm best balances power harvesting with optimal landscape coverage?
 
 ### Results
+
 *What data will be necessary to capture and communicate that new knowledge?  That is, what data will demonstrate:*
 
 To validate our solution, we will produce these specific metrics and data:
@@ -37,11 +40,11 @@ To validate our solution, we will produce these specific metrics and data:
 
 - **Control Comparison**: Collect accuracy, range, and power data from standard vs. optimized setups to demonstrate performance gains from our approach.
 
-
 ### Experiment
+
 *What experiment(s) will generate that specific data?*
 
-##### Experiment Setup
+#### Experiment Setup
 
 The experiment will use a **2D gridworld simulation**, dividing the landscape into sectors with adjustable parameters:
 

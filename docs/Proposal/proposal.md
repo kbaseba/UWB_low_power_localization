@@ -1,18 +1,16 @@
 # Title: Battery-free Real-time Localization of [Autonomous](https://millimobile.cs.washington.edu) Robot Swarms Using UWB
 
-### Summary:
+## Summary
 
 There is no current approach for completely battery-free real-time localization of autonomous mobile robots. We aim to use the MilliMobile as the power harvesting sensory nodes for robotic swarm localization through the utilization of ultra wideband (UWB) technology for centimeter level precision and exploration of dynamic environments.
 
 ### Splash images
 
-
-
-### Project git repo(s):
+### Project git repo(s)
 
 Example: [https://github.com/shushuai3/multi-robot-localization?tab=readme-ov-file](https://github.com/shushuai3/multi-robot-localization?tab=readme-ov-file)
 
-Our Repository: https://github.com/kbaseba/UWB_low_power_localization/tree/main
+Our Repository: <https://github.com/kbaseba/UWB_low_power_localization/tree/main>
 
 ## Big picture
 
@@ -64,11 +62,11 @@ Located in ./doc/References
 
 ## System capabilities, validation deliverables, engineering tasks
 
-### Concrete external deadlines (paper submissions):
+### Concrete external deadlines (paper submissions)
 
 \<TODO: discuss potential venues\>
 
-### Detailed schedule (weekly capabilities / deliverables / tasks):
+### Detailed schedule (weekly capabilities / deliverables / tasks)
 
 **Roles and Responsibilities:**
 
@@ -76,8 +74,6 @@ Located in ./doc/References
 
 **Hardware:** Tilboon, Renish  
 **Software:** Colin, Peter
-
-**TASKS: 6-7? Weeks of ACTUAL work, 1-2 for presentation & submission**
 
 1. Research of problem statement and related areas  
 2. High-level block diagram of the system design. (General)  
@@ -108,4 +104,3 @@ Located in ./doc/References
 
 Renish \- 11/06 (2 Midterms) ; 12/09 (1 Final)  
 Tilboon \- 10/30 (1 Midterm) ; 12/04 (1 Final)
-
