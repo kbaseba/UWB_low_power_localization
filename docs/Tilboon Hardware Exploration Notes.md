@@ -1,4 +1,4 @@
-**Localization techniques Summary:**
+# **Localization techniques Summary:**
 
 | Technology | Accuracy | Range | Power Consumption | Cost | Use Cases |
 | ----- | ----- | ----- | ----- | ----- | ----- |
@@ -10,7 +10,7 @@
 
 Potentially \- backscatter (reflected/non-reflected signal)?
 
-**Potential UWB Chip Study**
+## **Potential UWB Chip Study**
 
 | UWB Module | Sleep Mode | Low-Power Listening | Active Mode (Tx/Rx) | Max Range | Accuracy | Pros | Cons |
 | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
@@ -21,7 +21,7 @@ Potentially \- backscatter (reflected/non-reflected signal)?
 | **Qorvo QM33100 / 130** | \<1 µA | \~10 µA | 35-60 mA | \~200 meters | \~10-20 cm | \- Lower power consumption compared to QM33120W. \- Designed for IoT and low-power applications. | \- Less widely adopted. \- Limited documentation and community support. |
 | **Alteros ALPS UWB** | \<1 µA | \~7 µA | 30-50 mA | \~150 meters | \~10-30 cm | \- Very low power consumption during active and idle modes. \- Suitable for ultra-low-power applications. | \- Shorter range compared to other modules. \- Less community and support available. \- Niche product. |
 
-**UWB Chip Current Profile (QM33120W)**
+## **UWB Chip Current Profile (QM33120W)**
 
 | Mode | Current Consumption |
 | :---- | :---- |
@@ -29,4 +29,3 @@ Potentially \- backscatter (reflected/non-reflected signal)?
 | **Active (Receiving)** | 40-70 mA |
 | **Idle/Standby Mode** | 1-10 µA |
 | **Sleep Mode** | \<1 µA |
-
