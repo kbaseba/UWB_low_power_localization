@@ -7,4 +7,4 @@ class RoleUpdate:
 
     def update(self, robot):
         # Assign the role from the parsed instruction
-        robot.role = robot.received_instrucion[1]
+        robot.role = robot.data_receiver.data[1]

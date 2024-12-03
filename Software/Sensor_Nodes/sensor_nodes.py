@@ -1,18 +1,16 @@
 # Imports
 import numpy as np
 from shapely.geometry import Point, Polygon
+import math
 # This class updates the robot's sensor readings, including light intensity and collision detection.
 class SensorNodes:
     def __init__(self):
-        """
-        Initialize the sensor nodes with default values.
-        """
         self.light_intensity = None  # Light intensity at the robot's current position
         self.button_sensor = False  # State of the button sensor (collision detection)
 
     def update(self, robot, map):
         # Update light intensity based on the robot's position on the map
-        self.light_intensity = map.light_map[robot.position[1], robot.position[0]]
+        self.light_intensity = map.light_map[robot.position[0], robot.position[1]]
         
         # Check collision with obstacles
         for obs in self.obstacles:
@@ -36,12 +34,39 @@ class SensorNodes:
                     self.button_sensor = True
                     break
 
-        # Check collision with other robots
+        # Check collision with other robots within -90° to 90° of the robot's orientation
         for other_robot in map.robots:
-            if other_robot != robot:  # Avoid self-collision check
-                if abs(robot.position[0] - other_robot.position[0]) < 1 and abs(robot.position[1] - other_robot.position[1]) < 1:
-                    self.button_sensor = True
-                    break
+            if other_robot.id != robot.id:  # Avoid self-collision check
+                # Calculate the vector from the robot to the other robot
+                distance_x = other_robot.position[0] - robot.position[0]
+                distance_y = other_robot.position[1] - robot.position[1]
 
-        self.button_sensor = False
+                # Calculate the distance between the robots
+                distance = math.sqrt(distance_x**2 + distance_y**2)
+
+                if distance < 1.0:  # Adjust collision distance threshold as needed
+                    # Normalize the vector (distance_x, distance_y) to get the direction
+                    direction_vector = (distance_x / distance, distance_y / distance)
+
+                    # Get the robot's orientation as a unit vector
+                    orientation_vector = (
+                        math.cos(math.atan2(robot.orientation[1], robot.orientation[0])),
+                        math.sin(math.atan2(robot.orientation[1], robot.orientation[0])),
+                    )
+
+                    # Calculate the dot product to find the angle between vectors
+                    dot_product = (
+                        direction_vector[0] * orientation_vector[0]
+                        + direction_vector[1] * orientation_vector[1]
+                    )
+
+                    # Use the dot product to check if the angle is within -90° to 90°
+                    angle = math.degrees(math.acos(dot_product))
+                    if -90 <= angle <= 90:
+                        self.button_sensor = True
+                        break  # Exit loop after detecting collision
+        else:
+            # If no collision is detected, reset the button sensor to False
+            self.button_sensor = False
+
 
