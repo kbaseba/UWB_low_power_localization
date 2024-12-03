@@ -2,16 +2,27 @@
 
 # This class moves the robot in its current orientation and updates its power level accordingly.
 class MoveRobot:
-    def __init__(self, power_consumption_factor):
-        self.power_consumption_factor = power_consumption_factor
+    def __init__(self, power_consum = 1, velocity = 0.1):
+        self.power_consum = power_consum
+        self.velocity = velocity
+        self.state = True
 
-    def update(self, robot):
-        # Only move if the robot has enough power and no collision is detected
-        if robot.power_level < 5 and not robot.collision_indicator:
-            robot.position = (
-                robot.position[0] + robot.orientation[0],
-                robot.position[1] + robot.orientation[1],
-            )
+    def update(self, robot, power_threshold = 10):
+        # Only move if the robot has enough power
+        if robot.power_level < power_threshold:
+            # Reduce power for movement
+            robot.power_level -= self.power_consum
+            # Move forward if no collision is found
+            if self.state == True:
+                if robot.senser_nodes.button_sensor:
+                    robot.position = (
+                        robot.position[0] - self.velocity * robot.orientation[0],
+                        robot.position[1] - self.velocity * robot.orientation[1],
+                    )
+                    self.state = False
+                else:
+                    robot.position = (
+                        robot.position[0] + self.velocity * robot.orientation[0],
+                        robot.position[1] + self.velocity * robot.orientation[1],
+                    )
 
-        # Reduce power for movement
-        robot.power_level -= self.power_consumption_factor

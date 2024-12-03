@@ -1,10 +1,12 @@
 # Imports
-
+import move_robot
+import transmit_data
 # This class updates the robot's orientation based on the instructions received from the central hub.
 class InstructionExecution:
-    def __init__(self):
-        pass
+    def __init__(self, motor = move_robot.MoveRobot(), transmitter_caller = transmit_data.TransmitData()):
+        self.motor = motor
+        self.transmitter_caller = transmitter_caller
 
     def update(self, robot):
-        # Update the robot's orientation from the parsed instruction
-        robot.orientation = (self.received_instruction[0])
+        self.motor.update(robot = robot)
+        self.transmitter_caller.update(robot = robot)
