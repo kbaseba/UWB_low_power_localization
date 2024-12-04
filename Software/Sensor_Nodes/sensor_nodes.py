@@ -2,6 +2,7 @@
 import numpy as np
 from shapely.geometry import Point, Polygon
 import math
+
 # This class updates the robot's sensor readings, including light intensity and collision detection.
 class SensorNodes:
     def __init__(self):
@@ -9,18 +10,26 @@ class SensorNodes:
         self.button_sensor = False  # State of the button sensor (collision detection)
 
     def update(self, robot, map):
+        """
+        Updates sensor readings for the robot, including light intensity and collision detection.
+
+        Args:
+            robot (object): The robot object being updated.
+            map (object): The map object containing light and obstacle data.
+        """
         # Update light intensity based on the robot's position on the map
         self.light_intensity = map.light_map[robot.position[0], robot.position[1]]
-        
-        # Check collision with obstacles
+        # Check for collisions with obstacles
         for obs in self.obstacles:
             if obs[0] == "rectangle":
+                # Check if the robot is within the rectangle
                 _, rect_x, rect_y, rect_w, rect_h = obs
                 if rect_x <= robot.position[0] <= rect_x + rect_w and rect_y <= robot.position[1] <= rect_y + rect_h:
                     self.button_sensor = True
                     break
 
             elif obs[0] == "circle":
+                # Check if the robot is within the circle
                 _, cx, cy, r = obs
                 distance = np.sqrt((robot.position[0] - cx)**2 + (robot.position[1] - cy)**2)
                 if distance <= r:
@@ -28,15 +37,16 @@ class SensorNodes:
                     break
 
             elif obs[0] == "polygon":
+                # Check if the robot is within the polygon
                 _, points = obs
                 polygon = Polygon(points)
                 if polygon.contains(Point(robot.position[0], robot.position[1])):
                     self.button_sensor = True
                     break
 
-        # Check collision with other robots within -90° to 90° of the robot's orientation
+        # Check for collisions with other robots within the robot's field of view (within -90° to 90° of the robot's orientation)
         for other_robot in map.robots:
-            if other_robot.id != robot.id:  # Avoid self-collision check
+            if other_robot.id != robot.id:  # Ignore self-collision check
                 # Calculate the vector from the robot to the other robot
                 distance_x = other_robot.position[0] - robot.position[0]
                 distance_y = other_robot.position[1] - robot.position[1]
@@ -44,7 +54,7 @@ class SensorNodes:
                 # Calculate the distance between the robots
                 distance = math.sqrt(distance_x**2 + distance_y**2)
 
-                if distance < 1.0:  # Adjust collision distance threshold as needed
+                if distance < 0.1:  # Adjust collision distance threshold as needed
                     # Normalize the vector (distance_x, distance_y) to get the direction
                     direction_vector = (distance_x / distance, distance_y / distance)
 
