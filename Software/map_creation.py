@@ -4,7 +4,7 @@ from matplotlib.patches import Rectangle, Circle, Polygon
 from shapely.geometry import Polygon as ShapelyPolygon, box
 
 
-class MapCreation:
+class Map:
     def __init__(self, width=100, height=100, num_obstacles=10, light_variation=True):
         self.width = width
         self.height = height
@@ -15,6 +15,7 @@ class MapCreation:
         self.light_map = np.ones((height, width))  # Default light intensity = 1
         if light_variation:
             self.generate_light_intensity()
+        
 
     def generate_obstacles(self):
         """Generate non-overlapping obstacles."""
@@ -145,7 +146,7 @@ class MapCreation:
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
 
-    def plot_map(self):
+    def plot_map(self):#, robots):
         """Visualize the cleaned map with obstacles and shadows."""
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.imshow(self.light_map, cmap='gray', origin='lower')
@@ -172,7 +173,7 @@ class MapCreation:
 
 if __name__ == "__main__":
     # Create the map
-    map_creation = MapCreation(width=200, height=200, num_obstacles=20, light_variation=True)
+    map = Map(width=200, height=200, num_obstacles=20, light_variation=True)
 
     # Plot the generated map
-    map_creation.plot_map()
+    map.plot_map()

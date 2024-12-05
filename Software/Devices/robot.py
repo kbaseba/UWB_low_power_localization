@@ -31,7 +31,11 @@ class Robot:
         self.mode = "active" # Mode of the robot (e.g., active/low power)
         self.power_threshold = power_threshold # Power Threshold for low power mode
 
+<<<<<<< HEAD
         # Components responsible for specific robot tasks
+=======
+         # Components responsible for specific robot tasks
+>>>>>>> Colin
         self.data_receiver = data_receiver
         self.executor = executor
         self.sensors = sensors
@@ -81,4 +85,8 @@ class Robot:
                 "power_level": self.power_level,
                 "light_intensity": self.sensors.light_intensity,
                 "button_sensor_state": self.senser_nodes.button_sensor
+<<<<<<< HEAD
             }
+=======
+            }
+>>>>>>> Colin
