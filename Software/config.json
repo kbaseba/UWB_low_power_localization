@@ -2,7 +2,7 @@
     "map_width": 200,
     "map_height": 200,
     "num_obstacles": 20,
-    "light_variation": true,
+    "light_variation": false,
 
     "num_sectors": 16,
     "total_num_sensor_nodes": 50,
