@@ -17,9 +17,9 @@ class Robot:
         self.uwb_transmitter = uwb_localization
 
     def update(self):
-        self.motor.update()
+        """self.motor.update()
         self.sensors.update()
         self.collision_indicator.update()
         self.power_harvest.update()
         self.data_transmitter.update()
-        self.uwb_transmitter.update()
+        self.uwb_transmitter.update()"""
