@@ -31,20 +31,54 @@ class Robot:
         self.mode = "active" # Mode of the robot (e.g., active/low power)
         self.power_threshold = power_threshold # Power Threshold for low power mode
 
-        # Components responsible for specific robot tasks
+         # Components responsible for specific robot tasks
         self.data_receiver = data_receiver
         self.executor = executor
         self.sensors = sensors
-        self.collision_indicator = collision_indicator
-        self.power_harvest = power_harvest
-        self.role = role
-        self.data_transmitter = transmitted_data
-        self.uwb_transmitter = uwb_localization
+        self.power_harvester = power_harvester
+        self.data_transmitter = data_transmitter
+        self.uwb_transmitter = uwb_transmitter
 
-    def update(self):
-        """self.motor.update()
-        self.sensors.update()
-        self.collision_indicator.update()
-        self.power_harvest.update()
-        self.data_transmitter.update()
-        self.uwb_transmitter.update()"""
+    def move(self):
+        """
+        Updates the robot's position based on its movement capabilities.
+        This method triggers sensor updates and executes assigned tasks.
+        """
+        self.sensors.update()  # Update sensor readings
+        self.executor.update()  # Execute movement
+
+    def update(self, map, instruction = None):
+        """
+        Updates the robot's state by refreshing sensor data, harvesting power,
+        transmitting data, and handling UWB localization signals.
+        """
+        self.sensors.update(self, map)  # Refresh sensor readings
+        self.power_harvester.update(self)  # Harvest power based on light intensity
+        self.data_transmitter.update(self)  # Handle data transmission
+        self.uwb_transmitter.update(self)  # Activate or deactivate UWB localization
+        self.data_receiver.update(self, instruction)  # Parse and execute received instructions
+        # Check if the robot enters lower power mode from active
+        if self.mode == "active" and self.power_level < self.power_threshold[0]:
+            self.mode = "low power"
+            # Inform the central hub of entering low power mode
+            self.data_transmitter.state = True
+            self.power_level -= self.data_transmitter.power_consum
+            self.data_transmitter.data = {
+                "id": self.id,
+                "mode": self.mode,
+                "power_level": self.power_level,
+                "light_intensity": self.sensors.light_intensity,
+                "button_sensor_state": self.senser_nodes.button_sensor
+            }
+        elif self.mode == "low power" and self.power_level > self.power_threshold[1]:
+            self.mode = "active"
+            # Inform the central hub of exiting low power mode
+            self.data_transmitter.state = True
+            self.power_level -= self.data_transmitter.power_consum
+            self.data_transmitter.data = {
+                "id": self.id,
+                "mode": self.mode,
+                "power_level": self.power_level,
+                "light_intensity": self.sensors.light_intensity,
+                "button_sensor_state": self.senser_nodes.button_sensor
+            }
