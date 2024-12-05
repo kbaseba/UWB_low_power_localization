@@ -5,9 +5,6 @@ class Hub:
     def __init__(self, robots=[], anchors=[]):
         self.robots = robots
         self.anchors = anchors
-    def __init__(self, robots=[], anchors=[]):
-        self.robots = robots
-        self.anchors = anchors
         pass
 
     def update(self):
