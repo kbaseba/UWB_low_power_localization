@@ -52,7 +52,7 @@ class Robot:
         Updates the robot's state by refreshing sensor data, harvesting power,
         transmitting data, and handling UWB localization signals.
         """
-        """self.sensors.update(self, map)  # Refresh sensor readings
+        self.sensors.update(self, map)  # Refresh sensor readings
         self.power_harvester.update(self)  # Harvest power based on light intensity
         self.data_transmitter.update(self)  # Handle data transmission
         self.uwb_transmitter.update(self)  # Activate or deactivate UWB localization
@@ -81,4 +81,4 @@ class Robot:
                 "power_level": self.power_level,
                 "light_intensity": self.sensors.light_intensity,
                 "button_sensor_state": self.senser_nodes.button_sensor
-            }"""
+            }
