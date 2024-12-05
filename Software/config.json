@@ -6,5 +6,7 @@
 
     "num_sectors": 16,
     "total_num_sensor_nodes": 50,
-    "node_range": 10  
+    "node_range": 10,
+    "random_seed": 42
+
 }

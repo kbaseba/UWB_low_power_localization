@@ -150,7 +150,7 @@ class Map:
         self.light_map[downsampled_mask] *= shadow_value
 
 
-    def plot_map(self, sectors=None, node_positions=None):
+    def plot_map(self, sectors=None, sensor_node_positions=None, anchor_positions=None, hub_position=None):
         """Visualize the map with optional overlays for sectors and nodes."""
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.imshow(self.light_map, cmap='gray', origin='lower')
@@ -177,9 +177,16 @@ class Map:
                 ax.add_patch(rect)
 
         # Overlay nodes as x's or o's
-        if node_positions:
-            for x, y in node_positions:
+        if sensor_node_positions:
+            for x, y in sensor_node_positions:
                 ax.plot(x, y, 'rx', markersize=6)  # Red 'x' for nodes
+
+        if anchor_positions:
+            for x, y in anchor_positions:
+                ax.plot(x, y, 'o', markersize=14, color='yellow')
+
+        if hub_position:
+            ax.plot(hub_position[0], hub_position[1], 'go', markersize=18)
 
         # Set axis limits and title
         ax.set_xlim(0, self.width)
@@ -191,30 +198,40 @@ class Map:
 
 if __name__ == "__main__":
     # Load configuration from JSON file
-    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range = simulation_configuration_setup()
+    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed = simulation_configuration_setup()
+
+    # Set random seed for reproducibility
+    np.random.seed(random_seed)
 
     # Step 1: Create the map
     map_instance = Map(width=map_width, height=map_height, num_obstacles=num_obstacles, light_variation=light_variation)
 
     # Step 2: Perform sector assignment and node placement
     sector_assignment = SectorAssignment(map_width, map_height, num_sectors, total_num_sensor_nodes, node_range, map_instance.obstacles)
-    sectors, robots = sector_assignment.update()
+    sectors, hub = sector_assignment.update()
 
-    node_positions = [robot.position for robot in robots]
+    # Extract robot positions
+    sensor_node_positions = [robot.position for robot in hub.robots]
+
+    # Extract anchor positions
+    anchor_position = [anchor.position for anchor in hub.anchors]
+
+    # Extract hub position
+    hub_position = hub.position
 
     # Step 3: Leader selection
     leader_selection = LeaderSelection()
-    leader_nodes = leader_selection.update(robots)
+    leader_nodes = leader_selection.update(hub.robots)
 
     # Step 5: Print leader nodes with their IDs and power levels
     print("Leader Nodes:")
     for sector, leader_id in leader_nodes.items():
         if leader_id is not None:
             # Find the corresponding robot object
-            leader_robot = next(robot for robot in robots if robot.id == leader_id)
+            leader_robot = next(robot for robot in hub.robots if robot.id == leader_id)
             print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
         else:
             print(f"Sector: {sector}, No leader assigned")
 
-    map_instance.plot_map(sectors=sectors, node_positions=node_positions)
+    map_instance.plot_map(sectors=sectors, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
 

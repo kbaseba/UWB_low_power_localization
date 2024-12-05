@@ -2,6 +2,8 @@ import numpy as np
 from shapely.geometry import Point, Polygon, box
 
 from Devices.robot import Robot
+from Devices.anchor import Anchor
+from Devices.hub import Hub
 
 # Class comment
 class NodePlacement:
@@ -9,11 +11,28 @@ class NodePlacement:
     Strategically positions sensor nodes, UWB anchors, and the central hub
     within each sector to ensure effective localization, communication, and data collection.
     """
-    def __init__(self, total_num_sensor_nodes, node_range, obstacles):
+    def __init__(self, total_num_sensor_nodes, node_range, obstacles, map_width, map_height):
         self.total_num_sensor_nodes = total_num_sensor_nodes  # Total number of sensor nodes
         self.node_range = node_range  # Communication range of each node
         self.obstacles = obstacles  # List of obstacles on the map
         self.robots = []  # List of Robot objects
+        self.anchors = []  # List of Anchor objects
+        
+        self.map_width = map_width
+        self.map_height = map_height
+
+    def update(self, sectors):
+        # Place robots in sectors
+        robots = self.place_robots(sectors)
+
+        # Place anchors at the vertices of the map
+        anchors = self.place_anchors()
+
+        # Place the central hub at the center of the map
+        hub = self.place_hub(anchors, robots)
+
+        return hub
+
 
     def is_valid_position(self, x, y):
         """
@@ -38,7 +57,7 @@ class NodePlacement:
                     return False
         return True
 
-    def update(self, sectors):
+    def place_robots(self, sectors):
         """
         Place nodes randomly within the bounds of each sector, avoiding obstacles,
         and instantiate them as Robot objects.
@@ -84,3 +103,40 @@ class NodePlacement:
                 print(f"Warning: Could not place all nodes in sector {sector}.")
 
         return self.robots
+    
+    def place_anchors(self):
+        """
+        Place four anchors at the corners of the map.
+        """
+        # Define the corners of the map using map_width and map_height
+        corners = [
+            (0, 0),  # Bottom-left
+            (0, self.map_height),  # Top-left
+            (self.map_width, 0),  # Bottom-right
+            (self.map_width, self.map_height)  # Top-right
+        ]
+
+        self.anchors = []  # Reset the list of anchors
+        for i, (x, y) in enumerate(corners):
+            anchor = Anchor(id=i, position=(x, y))  # Create an Anchor instance
+            self.anchors.append(anchor)
+
+        return self.anchors
+
+    def place_hub(self, anchors, robots):
+        """
+        Place a central hub at the geometric center of the map.
+        """
+        # Calculate the center of the map
+        center_x = self.map_width / 2
+        center_y = self.map_height / 2
+
+        # Create the Hub instance
+        hub = Hub(
+            id=0,  # Assuming a single hub with ID 0
+            position=(center_x, center_y),
+            anchors=anchors,
+            robots=robots
+        )
+
+        return hub

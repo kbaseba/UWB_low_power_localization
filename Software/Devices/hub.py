@@ -8,11 +8,11 @@ call path planning algorithm with state estimated robot positions,
 and distribute robot instructions based on path planning.
 """
 class Hub:
-    def __init__(self, anchors=[], robots=[]):
+    def __init__(self, id, position, anchors=[], robots=[]):
+        self.id = id
+        self.position = position
         self.anchors = anchors
         self.robots = robots
-        #Initializing the first robot as the leader
-        self.robots[0].role = 'leader'
 
         #Dictionary to store robot data by robot id
         self.robotData = {}

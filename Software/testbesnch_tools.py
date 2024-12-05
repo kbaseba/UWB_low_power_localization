@@ -19,4 +19,6 @@ def simulation_configuration_setup():
     total_num_sensor_nodes = config["total_num_sensor_nodes"]
     node_range = config["node_range"]
 
-    return map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range
+    random_seed = config["random_seed"]
+
+    return map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed

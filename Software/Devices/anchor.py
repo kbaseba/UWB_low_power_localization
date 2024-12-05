@@ -2,8 +2,9 @@
 
 # Class comment
 class Anchor:
-    def __init__(self, position):
+    def __init__(self, position, id):
         self.position = position
+        self.id = id
         pass
 
     def update(self, robots):

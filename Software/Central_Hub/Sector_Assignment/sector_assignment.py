@@ -5,12 +5,12 @@ from .node_placement import NodePlacement
 class SectorAssignment:
     def __init__(self, map_width, map_height, num_sectors, num_nodes, node_range, obstacles):
         self.map_division = MapDivision(map_width, map_height, num_sectors)
-        self.node_placement = NodePlacement(num_nodes, node_range, obstacles)
+        self.node_placement = NodePlacement(num_nodes, node_range, obstacles, map_width, map_height)
 
     def update(self):
         """
         Perform sector division and node placement.
         """
         sectors = self.map_division.update()
-        robots = self.node_placement.update(sectors)
-        return sectors, robots
+        hub = self.node_placement.update(sectors)
+        return sectors, hub
