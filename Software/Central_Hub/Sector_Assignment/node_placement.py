@@ -1,6 +1,8 @@
 import numpy as np
 from shapely.geometry import Point, Polygon, box
 
+from Devices.robot import Robot
+
 # Class comment
 class NodePlacement:
     """
@@ -10,8 +12,8 @@ class NodePlacement:
     def __init__(self, total_num_sensor_nodes, node_range, obstacles):
         self.total_num_sensor_nodes = total_num_sensor_nodes  # Total number of sensor nodes
         self.node_range = node_range  # Communication range of each node
-        self.node_positions = []  # List of (x, y) positions for each node
         self.obstacles = obstacles  # List of obstacles on the map
+        self.robots = []  # List of Robot objects
 
     def is_valid_position(self, x, y):
         """
@@ -38,14 +40,17 @@ class NodePlacement:
 
     def update(self, sectors):
         """
-        Place nodes randomly within the bounds of each sector, avoiding obstacles.
+        Place nodes randomly within the bounds of each sector, avoiding obstacles,
+        and instantiate them as Robot objects.
         """
-        self.node_positions = []
+        self.robots = []  # Reset the list of robots
 
         # Calculate the number of nodes per sector and handle leftovers
         num_sectors = len(sectors)
         base_nodes_per_sector = self.total_num_sensor_nodes // num_sectors
         extra_nodes = self.total_num_sensor_nodes % num_sectors  # Leftover nodes to distribute
+
+        robot_id = 0  # Unique ID for each robot
 
         # Distribute nodes to each sector
         for i, sector in enumerate(sectors):
@@ -62,11 +67,20 @@ class NodePlacement:
                 x = np.random.uniform(x_start, x_end)
                 y = np.random.uniform(y_start, y_end)
                 if self.is_valid_position(x, y):
-                    self.node_positions.append((x, y))
+                    # Create a Robot instance for the valid position
+                    robot = Robot(
+                        id=robot_id,
+                        position=(x, y),
+                        sector=sector,
+                        orientation=(0, 0),  # Default orientation
+                        power_level=np.random.uniform(50, 100)  # Random initial power level
+                    )
+                    self.robots.append(robot)
+                    robot_id += 1
                     placed_nodes += 1
                 attempts += 1
 
             if attempts >= max_attempts:
                 print(f"Warning: Could not place all nodes in sector {sector}.")
 
-        return self.node_positions
+        return self.robots

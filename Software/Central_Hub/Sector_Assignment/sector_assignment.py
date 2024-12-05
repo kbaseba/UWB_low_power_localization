@@ -12,5 +12,5 @@ class SectorAssignment:
         Perform sector division and node placement.
         """
         sectors = self.map_division.update()
-        nodes = self.node_placement.update(sectors)
-        return sectors, nodes
+        robots = self.node_placement.update(sectors)
+        return sectors, robots

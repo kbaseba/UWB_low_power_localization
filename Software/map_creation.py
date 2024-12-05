@@ -5,6 +5,7 @@ from shapely.geometry import Polygon as ShapelyPolygon, box
 
 from testbesnch_tools import simulation_configuration_setup
 from Central_Hub.Sector_Assignment.sector_assignment import SectorAssignment
+from Central_Hub.Leader_Selection.leader_selection import LeaderSelection
 
 class Map:
     def __init__(self, width=100, height=100, num_obstacles=10, light_variation=True):
@@ -197,7 +198,23 @@ if __name__ == "__main__":
 
     # Step 2: Perform sector assignment and node placement
     sector_assignment = SectorAssignment(map_width, map_height, num_sectors, total_num_sensor_nodes, node_range, map_instance.obstacles)
-    sectors, node_positions = sector_assignment.update()
+    sectors, robots = sector_assignment.update()
+
+    node_positions = [robot.position for robot in robots]
+
+    # Step 3: Leader selection
+    leader_selection = LeaderSelection()
+    leader_nodes = leader_selection.update(robots)
+
+    # Step 5: Print leader nodes with their IDs and power levels
+    print("Leader Nodes:")
+    for sector, leader_id in leader_nodes.items():
+        if leader_id is not None:
+            # Find the corresponding robot object
+            leader_robot = next(robot for robot in robots if robot.id == leader_id)
+            print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
+        else:
+            print(f"Sector: {sector}, No leader assigned")
 
     map_instance.plot_map(sectors=sectors, node_positions=node_positions)
 

@@ -4,7 +4,7 @@
 # power harvesting, and role-based tasks. It integrates multiple components to simulate a robot's
 # behavior in a dynamic environment.
 class Robot:
-    def __init__(self, id = 0, position = (0, 0), orientation = (0, 0), power_level = 100, role = "non-leader", power_threshold = (10, 50), data_receiver = None,
+    def __init__(self, id = 0, position = (0, 0), sector = 0, orientation = (0, 0), power_level = 100, role = "non-leader", power_threshold = (10, 50), data_receiver = None,
                   executor = None, sensors = None, power_harvester = None, data_transmitter = None, uwb_transmitter = None):
         """
         Initializes a robot instance with its components and initial state.
@@ -25,6 +25,7 @@ class Robot:
         """
         self.id = id  # Unique ID of the robot
         self.position = position  # (x, y) coordinates of the robot's position
+        self.sector = sector # Sector of the robot
         self.orientation = orientation  # Orientation vector (dx, dy)
         self.power_level = power_level  # Remaining power level (max 100)
         self.role = role  # Role of the robot (e.g., leader/non-leader)
