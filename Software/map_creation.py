@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Circle, Polygon
 from shapely.geometry import Polygon as ShapelyPolygon, box
 
+from testbesnch_tools import simulation_configuration_setup
+from Central_Hub.Sector_Assignment.sector_assignment import SectorAssignment
 
 class Map:
     def __init__(self, width=100, height=100, num_obstacles=10, light_variation=True):
@@ -146,8 +148,9 @@ class Map:
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
 
-    def plot_map(self):#, robots):
-        """Visualize the cleaned map with obstacles and shadows."""
+
+    def plot_map(self, sectors=None, node_positions=None):
+        """Visualize the map with optional overlays for sectors and nodes."""
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.imshow(self.light_map, cmap='gray', origin='lower')
 
@@ -164,16 +167,37 @@ class Map:
                 poly = Polygon(points, closed=True, color='blue', alpha=0.9)
                 ax.add_patch(poly)
 
+        # Overlay sectors with black dotted lines
+        if sectors:
+            for sector in sectors:
+                x_start, x_end, y_start, y_end = sector
+                rect = Rectangle((x_start, y_start), x_end - x_start, y_end - y_start, 
+                                edgecolor='black', facecolor='none', linestyle='--', linewidth=1)
+                ax.add_patch(rect)
+
+        # Overlay nodes as x's or o's
+        if node_positions:
+            for x, y in node_positions:
+                ax.plot(x, y, 'rx', markersize=6)  # Red 'x' for nodes
+
         # Set axis limits and title
         ax.set_xlim(0, self.width)
         ax.set_ylim(0, self.height)
-        ax.set_title("Clean Map with Obstacles and Shadows")
+        ax.set_title("Map with Obstacles, Sectors, and Sensor Nodes")
         plt.show()
 
 
-if __name__ == "__main__":
-    # Create the map
-    map = Map(width=200, height=200, num_obstacles=20, light_variation=True)
 
-    # Plot the generated map
-    map.plot_map()
+if __name__ == "__main__":
+    # Load configuration from JSON file
+    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range = simulation_configuration_setup()
+
+    # Step 1: Create the map
+    map_instance = Map(width=map_width, height=map_height, num_obstacles=num_obstacles, light_variation=light_variation)
+
+    # Step 2: Perform sector assignment and node placement
+    sector_assignment = SectorAssignment(map_width, map_height, num_sectors, total_num_sensor_nodes, node_range, map_instance.obstacles)
+    sectors, node_positions = sector_assignment.update()
+
+    map_instance.plot_map(sectors=sectors, node_positions=node_positions)
+
