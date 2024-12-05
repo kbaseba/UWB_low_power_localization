@@ -1,28 +1,52 @@
 # Imports
 
-# Class comment
+""" 
+The hub will receive data transmission from robots,
+UWBLocalize the leader robot,
+determine the next leader robot based on robot power levels,
+call path planning algorithm with state estimated robot positions,
+and distribute robot instructions based on path planning.
+"""
 class Hub:
-    def __init__(self, robots=[], anchors=[]):
-        self.robots = robots
+    def __init__(self, anchors=[], robots=[]):
         self.anchors = anchors
+        self.robots = robots
+        #Initializing the first robot as the leader
+        self.robots[0].role = 'leader'
+
+        #Dictionary to store robot data by robot id
+        self.robotData = {}
+
+        #Dictionary for UWB localizations, keyed by robot id
+        self.localizations = {}
+        pass
+
+    def receiveData(self):
+        #Checking all robots for data transmission
+        for robot in self.robots:
+            #Is the robot is in the transmission state
+            if robot.data_transmitter.state:
+                #Store the data in the hub's data dictionary
+                self.robotData[robot.id] = robot.data_transmitter
+
+
+    def UWBLocalization(self):
+        #measuring location from each anchor
+        measurements = []
+        for anchor in self.anchors:
+            id, measuredPosition = anchor.update(self.robots)
+            measurements.append(measuredPosition)
+        xpos,ypos = 0,0
+        for position in measurements:
+            xpos += position[0]
+            ypos += position[1]
+        #Determining the average of the measurements to be the localization
+        avgMeasuredDist = (xpos/len(self.anchors), ypos/len(self.anchors))
+        self.localizations[id] = avgMeasuredDist
         pass
 
     def update(self):
+        #Receive incoming data from robots
+
         #Update the three anchors, localizing leader robot
-        anchorMeasurements = []
-        for anchor in self.anchors:
-            anchorMeasure = anchor.update(self.robots)
-            anchorMeasurements.append(anchorMeasure)
-        #If no robots are assigned leader
-        num_anchorsMeasurements = len(anchorMeasurements)
-        if num_anchorsMeasurements==0:
-            #print('No leader robots')
-            pass
-        else:
-            xpos,ypos = 0,0
-            for position in anchorMeasurements:
-                xpos += position[0]
-                ypos += position[1]
-            avgMeasuredDist = (xpos/num_anchorsMeasurements, ypos/num_anchorsMeasurements)
-            print(avgMeasuredDist)
-            return avgMeasuredDist
+        self.UWBLocalization()

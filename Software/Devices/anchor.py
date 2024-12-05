@@ -11,5 +11,5 @@ class Anchor:
         for robot in robots:
             #If the uwb_transmitter signal is True, update position
             if robot.uwb_transmitter.signal:
-                return robot.position
+                return robot.id, robot.position
         
