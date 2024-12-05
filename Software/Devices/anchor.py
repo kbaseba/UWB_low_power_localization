@@ -10,6 +10,6 @@ class Anchor:
         #Checking all the robots to see if they're transmitting UWB blinks
         for robot in robots:
             #If the uwb_transmitter signal is True, update position
-            if robot.uwb_transmitter.signal:
+            if robot.uwb_transmitter == None:
                 return robot.id, robot.position
         

@@ -146,7 +146,7 @@ class Map:
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
 
-    def plot_map(self):#, robots):
+    def plot_map(self, robots):
         """Visualize the cleaned map with obstacles and shadows."""
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.imshow(self.light_map, cmap='gray', origin='lower')
@@ -163,6 +163,10 @@ class Map:
                 _, points = obs
                 poly = Polygon(points, closed=True, color='blue', alpha=0.9)
                 ax.add_patch(poly)
+
+        #Add the robots
+        for robot in robots:
+            ax.add_patch(Circle(robot.position, 0.5, color='red', alpha=1))
 
         # Set axis limits and title
         ax.set_xlim(0, self.width)

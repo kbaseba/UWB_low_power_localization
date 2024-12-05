@@ -26,15 +26,23 @@ class Simulator:
             anchor = Anchor(position=vertex)
             self.addAnchor(anchor)
 
-        #Generating robots at random positions in map
+        #Generating robots at random positions in map that don't intersect obstacles
         self.robots = []
         for i in range(num_robots):
-            robot = Robot(id=i, position=(random.randint(0,self.map_dimensions[0]),random.randint(0,self.map_dimensions[1])))
-            robot.update(map=None)
+            #Randomly choosing a position, making sure that it doesn't intersect any obstacles
+            pos = (random.randint(0,self.map_dimensions[0]),random.randint(0,self.map_dimensions[1]))
+            while self.map._check_overlap("circle", pos[0],pos[1],0.5):
+                print('Position intersects obstacle, retrying...')
+                pos = (random.randint(0,self.map_dimensions[0]),random.randint(0,self.map_dimensions[1]))
+            robot = Robot(id=i, position=pos)
+            robot.update(map=self.map)
             self.addRobot(robot)
 
         #Generating hub
         self.Hub = Hub(self.anchors, self.robots)
+        
+        #Plotting the map
+        self.map.plot_map(self.robots)
 
         pass
     
@@ -62,16 +70,18 @@ class Simulator:
         self.Hub.update()
         #Update robots
         for robot in self.robots:
-            robot.update()
+            robot.update(self.map)
         pass
 
 if __name__ =='__main__':
     #Creating simulator instance
     simulator = Simulator()
     simulator.printStatus()
+    #Initializing time-step
     t = 0
+    time_unit = 0.5
     while True:
         simulator.update()
-        time.sleep(1)
+        time.sleep(time_unit)
         t += 1
-        print(f"{t}\t")
+        print(f"Time step: {t}, time: {time_unit*t}\t")
