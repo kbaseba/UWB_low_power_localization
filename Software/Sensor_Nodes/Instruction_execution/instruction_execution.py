@@ -8,6 +8,6 @@ class InstructionExecution:
         self.motor = motor
         self.transmitter_caller = transmitter_caller
 
-    def update(self, robot):
-        self.motor.update(robot = robot)
+    def update(self, robot, map, robots):
+        self.motor.update(robot, map, robots)
         self.transmitter_caller.update(robot = robot)

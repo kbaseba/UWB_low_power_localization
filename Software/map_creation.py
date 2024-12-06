@@ -18,6 +18,7 @@ class Map:
         self.light_map = np.ones((height, width))  # Default light intensity = 1
         if light_variation:
             self.generate_light_intensity()
+        self.fig, self.ax = plt.subplots(figsize=(10, 10))
         
 
     def generate_obstacles(self):
@@ -148,25 +149,25 @@ class Map:
 
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
-
-
-    def plot_map(self, sectors=None, sensor_node_positions=None, anchor_positions=None, hub_position=None):
+    
+    def update(self, sectors, sensor_node_positions, anchor_positions, hub_position):
+        # Clear the axis and redraw
+        self.ax.clear()
         """Visualize the map with optional overlays for sectors and nodes."""
-        fig, ax = plt.subplots(figsize=(10, 10))
-        ax.imshow(self.light_map, cmap='gray', origin='lower')
+        self.ax.imshow(self.light_map, cmap='gray', origin='lower')
 
         # Draw each obstacle
         for obs in self.obstacles:
             if obs[0] == "rectangle":
                 _, x, y, w, h = obs
-                ax.add_patch(Rectangle((x, y), w, h, color='blue', alpha=0.9))
+                self.ax.add_patch(Rectangle((x, y), w, h, color='blue', alpha=0.9))
             elif obs[0] == "circle":
                 _, cx, cy, r = obs
-                ax.add_patch(Circle((cx, cy), r, color='blue', alpha=0.9))
+                self.ax.add_patch(Circle((cx, cy), r, color='blue', alpha=0.9))
             elif obs[0] == "polygon":
                 _, points = obs
                 poly = Polygon(points, closed=True, color='blue', alpha=0.9)
-                ax.add_patch(poly)
+                self.ax.add_patch(poly)
 
         # Overlay sectors with black dotted lines
         if sectors:
@@ -174,25 +175,24 @@ class Map:
                 x_start, x_end, y_start, y_end = sector
                 rect = Rectangle((x_start, y_start), x_end - x_start, y_end - y_start, 
                                 edgecolor='black', facecolor='none', linestyle='--', linewidth=1)
-                ax.add_patch(rect)
+                self.ax.add_patch(rect)
 
         # Overlay nodes as x's or o's
         if sensor_node_positions:
             for x, y in sensor_node_positions:
-                ax.plot(x, y, 'rx', markersize=6)  # Red 'x' for nodes
+                self.ax.plot(x, y, 'rx', markersize=6)  # Red 'x' for nodes
 
         if anchor_positions:
             for x, y in anchor_positions:
-                ax.plot(x, y, 'o', markersize=14, color='yellow')
+                self.ax.plot(x, y, 'o', markersize=14, color='yellow')
 
         if hub_position:
-            ax.plot(hub_position[0], hub_position[1], 'go', markersize=18)
+            self.ax.plot(hub_position[0], hub_position[1], 'go', markersize=18)
 
-        # Set axis limits and title
-        ax.set_xlim(0, self.width)
-        ax.set_ylim(0, self.height)
-        ax.set_title("Map with Obstacles, Sectors, and Sensor Nodes")
-        plt.show()
+        # Set self.axis limits and title
+        self.ax.set_xlim(0, self.width)
+        self.ax.set_ylim(0, self.height)
+        self.ax.set_title("Map with Obstacles, Sectors, and Sensor Nodes")
 
 
 

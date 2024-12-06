@@ -53,7 +53,7 @@ class Robot:
         This method triggers sensor updates and executes assigned tasks.
         """
         self.sensors.update(self, map, robots)  # Update sensor readings
-        self.executor.update(self)  # Execute movement
+        self.executor.update(self, map, robots)  # Execute movement
 
     def update(self, map, robots):
         """
