@@ -2,7 +2,7 @@
 from .potential_field_computation import PotentialFieldComputation
 # Class comment
 class SwarmCoordination:
-    def _init_(self,hub):
+    def __init__(self,hub):
         self.hub=hub
 
     def update(self,map):
