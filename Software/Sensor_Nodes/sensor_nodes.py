@@ -29,25 +29,25 @@ class SensorNodes:
         # Check for collisions with obstacles
         for obs in map.obstacles:
             if obs[0] == "rectangle":
-                # Check if the robot is within the rectangle
+                # Check if the robot collides with the rectangle
                 _, rect_x, rect_y, rect_w, rect_h = obs
-                if rect_x <= robot.position[0] <= rect_x + rect_w and rect_y <= robot.position[1] <= rect_y + rect_h:
+                if rect_x <= robot.position[0]+robot.orientation[0] <= rect_x + rect_w and rect_y <= robot.position[1]+robot.orientation[1] <= rect_y + rect_h:
                     self.button_sensor = True
                     return
 
             elif obs[0] == "circle":
-                # Check if the robot is within the circle
+                # Check if the robot collides with the circle
                 _, cx, cy, r = obs
-                distance = np.sqrt((robot.position[0] - cx)**2 + (robot.position[1] - cy)**2)
+                distance = np.sqrt((robot.position[0]+robot.orientation[0] - cx)**2 + (robot.position[1]+robot.orientation[1] - cy)**2)
                 if distance <= r:
                     self.button_sensor = True
                     return
 
             elif obs[0] == "polygon":
-                # Check if the robot is within the polygon
+                # Check if the robot collides with the polygon
                 _, points = obs
                 polygon = Polygon(points)
-                if polygon.contains(Point(robot.position[0], robot.position[1])):
+                if polygon.contains(Point(robot.position[0]+robot.orientation[0], robot.position[1]+robot.orientation[1])):
                     self.button_sensor = True
                     return
 
