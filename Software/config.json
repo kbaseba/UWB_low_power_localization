@@ -13,10 +13,10 @@
     "max_power_threshold": 20,
     "duty_cycle": 2,
     "efficacy": 10.0,
-    "motor_power_consum": 1.0,
+    "motor_power_consum": 0,
     "velocity": 0.1,
-    "ble_power_consum": 0.1,
-    "uwb_power_consum": 40.0,
+    "ble_power_consum": 0,
+    "uwb_power_consum": 0,
 
     "dt": 1.0,
     "H":[

@@ -61,7 +61,7 @@ class SensorNodes:
                 # Calculate the distance between the robots
                 distance = math.sqrt(distance_x**2 + distance_y**2)
 
-                if distance < 3:  # Adjust collision distance threshold as needed
+                if distance < 1:  # Adjust collision distance threshold as needed
                     # Normalize the vector (distance_x, distance_y) to get the direction
                     print(f"distance: {distance}")
 

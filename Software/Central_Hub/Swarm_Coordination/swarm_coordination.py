@@ -12,3 +12,4 @@ class SwarmCoordination:
                 PotentialFieldComputation(map=map,hub=self.hub, robot=self.hub.robots[data["id"]]).update()
                 print(self.hub.robots[data["id"]].orientation)
                 self.hub.robots[data["id"]].executor.motor.state = True
+                data["button_sensor_state"] = False
