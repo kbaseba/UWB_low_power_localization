@@ -59,7 +59,6 @@ class CentralHub:
 
         # Extract robot positions
         sensor_node_positions = [robot.position for robot in self.hub.robots]
-        print(sensor_node_positions)
 
         # Extract anchor positions
         anchor_position = [anchor.position for anchor in self.hub.anchors]
@@ -77,7 +76,7 @@ class CentralHub:
             if leader_id is not None:
                 # Find the corresponding robot object
                 leader_robot = next(robot for robot in self.hub.robots if robot.id == leader_id)
-                print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
+                # print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
             else:
                 print(f"Sector: {sector}, No leader assigned")
 
