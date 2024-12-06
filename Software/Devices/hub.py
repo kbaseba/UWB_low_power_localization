@@ -32,19 +32,35 @@ class Hub:
 
 
     def UWBLocalization(self):
-        #measuring location from each anchor
+        # Measuring location from each anchor
         measurements = []
+        full_measurements = []
+        avg_positions = []
+        leaders = []
+
         for anchor in self.anchors:
-            id, measuredPosition = anchor.update(self.robots)
-            measurements.append(measuredPosition)
-        xpos,ypos = 0,0
-        for position in measurements:
-            xpos += position[0]
-            ypos += position[1]
-        #Determining the average of the measurements to be the localization
-        avg_position = (xpos/len(self.anchors), ypos/len(self.anchors))
-        self.robots[id].just_localized = True
-        self.localizations[id].append(self.robots[id].position)
+            leaders = anchor.update(self.robots)
+            measurement = [robot.position for robot in leaders]
+            full_measurements.append(measurement)
+
+        # Calculate average positions for each robot
+        num_robots = len(full_measurements[0]) if full_measurements else 0
+        for i in range(num_robots):
+            measurements_for_robot = [anchor[i] for anchor in full_measurements]
+            avg_x = sum(pos[0] for pos in measurements_for_robot) / len(measurements_for_robot)
+            avg_y = sum(pos[1] for pos in measurements_for_robot) / len(measurements_for_robot)
+            avg_positions.append((avg_x, avg_y))
+
+        # Determine the average of the measurements to be the localization
+        for i, robot in enumerate(leaders):
+            robot.just_localized = True
+
+            # Initialize the robot's localization list if not already initialized
+            if robot.id not in self.localizations:
+                self.localizations[robot.id] = []
+
+            self.localizations[robot.id].append(avg_positions[i])
+
 
     def update(self):
         #Receive incoming data from robots
