@@ -18,7 +18,7 @@ class Map:
         self.light_map = np.ones((height, width))  # Default light intensity = 1
         if light_variation:
             self.generate_light_intensity()
-        self.fig, (self.ax1, self.ax2) = plt.subplots(1, 2, figsize=(15, 7))
+        self.fig, (self.ax1, self.ax2, self.ax3) = plt.subplots(1, 3, figsize=(15, 5))
         
 
     def generate_obstacles(self):
@@ -197,7 +197,30 @@ class Map:
             y_history = [state[1, 0] for state in robot.estimate_history[10:]]  # y-coordinates from 21st onwards
 
             # Plot the path
-            plt.plot(x_history, y_history, color='black', label=f'Robot {robot.id}')  # Add a label if robots have IDs
+            self.ax2.plot(x_history, y_history, color='black', label=f'Robot {robot.id}')  # Add a label if robots have IDs
+        
+        self.ax3.clear()
+
+        for robot in robots:
+            # Determine the marker color based on battery level
+            if 0 <= robot.power_level <= 33:
+                marker_color = 'red'
+            elif 34 <= robot.power_level <= 66:
+                marker_color = 'yellow'
+            elif 67 <= robot.power_level <= 100:
+                marker_color = 'green'
+            else:
+                marker_color = 'gray'  # Fallback for invalid battery levels
+
+            # Get the most recent position
+            if len(robot.estimate_history) > 10:  # Ensure there are enough estimates
+                last_state = robot.estimate_history[-1]  # Only the most recent state
+                x_last, y_last = last_state[0, 0], last_state[1, 0]
+
+                # Plot only the most recent point
+                self.ax3.scatter(x_last, y_last, color=marker_color, s=100, label=f'Robot {robot.id} ({robot.power_level}%)')
+
+
 
         for x,y in hub.collisions:
             self.ax1.plot(x, y, 'o', markersize=2, color='red')
@@ -216,3 +239,7 @@ class Map:
         self.ax2.set_xlim(0, self.width)
         self.ax2.set_ylim(0, self.height)
         self.ax2.set_title("Mapping")
+
+        self.ax3.set_xlim(0, self.width)
+        self.ax3.set_ylim(0, self.height)
+        self.ax3.set_title("Node Battery Level")

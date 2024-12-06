@@ -21,8 +21,6 @@ class Simulator:
         animation = FuncAnimation(self.map.fig, self.central_hub.update, frames=frames, interval=interval)
         plt.show()
 
-        animation.save('animation.mp4', fps=30, dpi=300, writer='ffmpeg')
-
 if __name__ == "__main__":
     # Load configuration from JSON file
     map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R = simulation_configuration_setup()

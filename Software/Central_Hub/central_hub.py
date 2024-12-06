@@ -29,7 +29,8 @@ class CentralHub:
         self.leader_nodes = self.leader_selection.update(self.hub.robots)
 
         for robot in self.hub.robots:
-            robot.move(self.map, self.hub.robots)
+            if robot.mode == "active":
+                robot.move(self.map, self.hub.robots)
 
         for robot in self.hub.robots:
             robot.update(self.map, self.hub.robots)
@@ -37,13 +38,18 @@ class CentralHub:
         self.hub.receiveData()
         self.hub.update()
         
+        count = 0
         for i, estimator in enumerate(self.estimators):
-            if self.hub.robots[i].just_localized == True:
+            
+            # if self.hub.robots[i].just_localized == True:
+            if count % 2:
                 self.hub.robots[i].just_localized = False
                 x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.robots[i].position).reshape(2, 1))
             else:
-                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.robots[i].position).reshape(2, 1))
+                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=True)
             self.hub.robots[i].estimate_history.append(x̂)
+
+            count += 1
 
         self.mapping.update()
         self.swarm_coordination.update(self.map)

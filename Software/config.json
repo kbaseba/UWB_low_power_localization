@@ -2,7 +2,7 @@
     "map_width": 200,
     "map_height": 200,
     "num_obstacles": 20,
-    "light_variation": true,
+    "light_variation": false,
 
     "num_sectors": 16,
     "total_num_sensor_nodes": 100,
@@ -12,11 +12,11 @@
     "min_power_threshold": 10,
     "max_power_threshold": 20,
     "duty_cycle": 2,
-    "efficacy": 10.0,
-    "motor_power_consum": 1.0,
+    "efficacy": 9.7,
+    "motor_power_consum": 5.0,
     "velocity": 0.0001,
-    "ble_power_consum": 0.1,
-    "uwb_power_consum": 15.0,
+    "ble_power_consum": 3.0,
+    "uwb_power_consum": 30.0,
 
     "dt": 1.0,
     "H":[
