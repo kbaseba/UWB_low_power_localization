@@ -19,7 +19,7 @@ class CentralHub:
 
         self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [0.0]])) for robot in self.hub.robots]
         self.mapping = Mapping(self.hub)
-        # self.swarm_coordination = SwarmCoordination()
+        self.swarm_coordination = SwarmCoordination(self.hub)
         
     def update(self, frame=None):
         self.leader_nodes = self.leader_selection.update(self.hub.robots)
@@ -42,7 +42,7 @@ class CentralHub:
             self.hub.robots[i].estimate_history.append(x̂)
 
         self.mapping.update()
-        # self.swarm_coordination.update(self.hub.robots)
+        self.swarm_coordination.update(self.map)
 
 
 
