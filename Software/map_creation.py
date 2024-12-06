@@ -192,7 +192,9 @@ class Map:
 
         # Plot robot path as a line
         for robot in robots:
-            self.ax2.plot(*zip(robot.estimate_history), 'b--')
+            self.ax2.plot(*zip([[arr[0][0], arr[1][0]] for arr in robot.estimate_history]), 'b--')
+            # print(robot.estimate_history)
+
 
         # Set self.axis limits and title
         self.ax1.set_xlim(0, self.width)
