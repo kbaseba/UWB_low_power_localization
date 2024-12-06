@@ -14,7 +14,7 @@
     "duty_cycle": 2,
     "efficacy": 0.5,
     "motor_power_consum": 0.5,
-    "velocity": 5,
+    "velocity": 1,
     "ble_power_consum": 0.5,
     "uwb_power_consum": 0.5,
 

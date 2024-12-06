@@ -17,7 +17,7 @@ class CentralHub:
         self.leader_selection = LeaderSelection()
         self.sectors, self.hub = self.sector_assignment.update()
 
-        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [0], [0]])) for robot in self.hub.robots]
+        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [0], [robot.executor.motor.velocity]])) for robot in self.hub.robots]
         # self.mapping = Mapping()
         # self.swarm_coordination = SwarmCoordination()
         
