@@ -192,8 +192,13 @@ class Map:
 
         # Plot robot path as a line
         for robot in robots:
-            self.ax2.plot(*zip([[arr[0][0], arr[1][0]] for arr in robot.estimate_history]), 'b--')
-            # print(robot.estimate_history)
+            # Extract x and y coordinates for the trajectory
+            x_history = [state[0, 0] for state in robot.estimate_history]  # x-coordinates over time
+            y_history = [state[1, 0] for state in robot.estimate_history]  # y-coordinates over time
+
+            # Plot the trajectory as a connected line
+            self.ax2.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
+
 
 
         # Set self.axis limits and title
