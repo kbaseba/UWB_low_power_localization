@@ -1,14 +1,15 @@
 # Imports
+import numpy as np
 
 from .Sector_Assignment.sector_assignment import SectorAssignment
 from .Leader_Selection.leader_selection import LeaderSelection
-from .estimator import Estimator
+from .Estimator.estimator import Estimator
 from .mapping import Mapping
 from .Swarm_Coordination.swarm_coordination import SwarmCoordination
 
 # Class comment
 class CentralHub:
-    def __init__(self, map, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum):
+    def __init__(self, map, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R):
         self.map = map
         self.leader_nodes = None
         self.sector_assignment = SectorAssignment(self.map.width, self.map.height, num_sectors, total_num_sensor_nodes, node_range, self.map.obstacles, 
@@ -16,7 +17,7 @@ class CentralHub:
         self.leader_selection = LeaderSelection()
         self.sectors, self.hub = self.sector_assignment.update()
 
-        self.estimator = Estimator()
+        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [0], [0]])) for robot in self.hub.robots]
         # self.mapping = Mapping()
         # self.swarm_coordination = SwarmCoordination()
         
@@ -30,7 +31,15 @@ class CentralHub:
             robot.update(self.map, self.hub.robots)
 
         self.hub.receiveData()
-        self.estimator.update()
+
+        for i, estimator in enumerate(self.estimators):
+            if self.hub.robots[i].just_localized == True:
+                self.hub.robots[i].just_localized = False
+                x̂, P, r, A = estimator.update(u=np.array(self.hub.robots[i].orientation).reshape(1, 1), z=np.array(self.hub.localizations[i]))
+            else:
+                x̂, P, r, A = estimator.update(u=np.array(self.hub.robots[i].orientation).reshape(1, 1), z=None)
+            self.hub.robots[i].estimate_history.append(x̂)
+
         # self.mapping.update(self.hub.robots)
         # self.swarm_coordination.update(self.hub.robots)
 

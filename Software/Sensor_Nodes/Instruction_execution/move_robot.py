@@ -1,5 +1,5 @@
 # Imports
-
+import math
 # This class moves the robot in its current orientation and updates its power level accordingly.
 class MoveRobot:
     def __init__(self, motor_power_consum = 1, velocity = 0.1):
@@ -32,15 +32,15 @@ class MoveRobot:
             if robot.sensors.button_sensor:
                 # Reverse movement
                 robot.position = (
-                    robot.position[0] - self.velocity * robot.orientation[0],
-                    robot.position[1] - self.velocity * robot.orientation[1],
+                    robot.position[0] - self.velocity * math.cos(robot.orientation),
+                    robot.position[1] - self.velocity * math.sin(robot.orientation)
                 )
                 self.state = False
             else:
                 # Forward movement
                 robot.position = (
-                    robot.position[0] + self.velocity * robot.orientation[0],
-                    robot.position[1] + self.velocity * robot.orientation[1],
+                    robot.position[0] + self.velocity * math.cos(robot.orientation),
+                    robot.position[1] + self.velocity * math.sin(robot.orientation)
                 )
         # Update sensor readings after movement
             robot.sensors.update(robot, map, robots)

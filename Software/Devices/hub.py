@@ -40,9 +40,10 @@ class Hub:
             xpos += position[0]
             ypos += position[1]
         #Determining the average of the measurements to be the localization
-        avgMeasuredDist = (xpos/len(self.anchors), ypos/len(self.anchors))
-        self.localizations[id] = avgMeasuredDist
-        pass
+        avg_position = (xpos/len(self.anchors), ypos/len(self.anchors))
+        self.localizations[id] = avg_position
+        self.robots[id].just_localized = True
+        self.localizations[id].append(avg_position)
 
     def update(self):
         #Receive incoming data from robots

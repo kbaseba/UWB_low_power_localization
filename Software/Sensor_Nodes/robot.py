@@ -12,7 +12,7 @@ from .uwb_localization import UWBLocalization
 # power harvesting, and role-based tasks. It integrates multiple components to simulate a robot's
 # behavior in a dynamic environment.
 class Robot:
-    def __init__(self, id = 0, position = (0, 0), sector = 0, orientation = (0, 0), power_level = 100, role = "non-leader", threshold = (10, 50), duty_cycle = 0, 
+    def __init__(self, id = 0, position = (0, 0), sector = 0, orientation = 0, power_level = 100, role = "non-leader", threshold = (10, 50), duty_cycle = 0, 
                  motor_power_consum = 0, velocity = 0, efficacy = 0, ble_power_consum = 0, uwb_power_consum = 0):
         """
         Initializes a robot instance with its components and initial state.
@@ -39,6 +39,8 @@ class Robot:
         self.role = role  # Role of the robot (e.g., leader/non-leader)
         self.mode = "active" # Mode of the robot (e.g., active/low power)
         self.power_threshold = threshold # Power Threshold for low power mode
+        self.just_localized = False
+        self.estimate_history = []
 
         # Components responsible for specific robot tasks
         self.executor = InstructionExecution(MoveRobot(motor_power_consum, velocity))
