@@ -14,7 +14,7 @@ class TransmitData:
             robot (object): The robot object being updated.
         """
         # Check if collision is detected
-        if not robot.senser_nodes.button_sensor:
+        if not robot.sensors.button_sensor:
             return
         else:
             robot.data_transmitter.state = True
@@ -26,6 +26,6 @@ class TransmitData:
                 "mode": robot.mode,
                 "power_level": robot.power_level,
                 "light_intensity": robot.sensors.light_intensity,
-                "button_sensor_state": robot.senser_nodes.button_sensor
+                "button_sensor_state": robot.sensors.button_sensor
             }
             robot.data_transmitter.data = data

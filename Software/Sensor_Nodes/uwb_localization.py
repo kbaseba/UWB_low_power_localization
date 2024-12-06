@@ -22,6 +22,7 @@ class UWBLocalization:
         if robot.role == "leader":
             # Leader robots send UWB signals and consume power
             robot.power_level -= self.power_consum
+            robot.role = "non-leader"
             self.state = True
         else:
             # Non-leader robots do not send signals

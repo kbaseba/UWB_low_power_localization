@@ -1,10 +1,10 @@
 # Imports
-import move_robot
-import transmit_data
+from .move_robot import MoveRobot
+from .transmit_data import TransmitData
 
 # This class encapsulate instructions execution.
 class InstructionExecution:
-    def __init__(self, motor = move_robot.MoveRobot(), transmitter_caller = transmit_data.TransmitData()):
+    def __init__(self, motor = MoveRobot(), transmitter_caller = TransmitData()):
         self.motor = motor
         self.transmitter_caller = transmitter_caller
 

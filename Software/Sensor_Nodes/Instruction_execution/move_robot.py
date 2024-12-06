@@ -2,7 +2,7 @@
 
 # This class moves the robot in its current orientation and updates its power level accordingly.
 class MoveRobot:
-    def __init__(self, power_consum = 1, velocity = 0.1):
+    def __init__(self, motor_power_consum = 1, velocity = 0.1):
         """
         Initializes the movement system for the robot.
 
@@ -10,7 +10,7 @@ class MoveRobot:
             power_consum (float): Power consumed per movement step.
             velocity (float): Movement velocity per update.
         """
-        self.power_consum = power_consum
+        self.motor_power_consum = motor_power_consum
         self.velocity = velocity
         self.state = False  # Indicates whether the robot can move.
 
@@ -26,7 +26,7 @@ class MoveRobot:
         if robot == "low power":
             return
         # Reduce power for movement
-        robot.power_level -= self.power_consum
+        robot.power_level -= self.motor_power_consum
         # Move forward if no collision is found
         if self.state:
             if robot.senser_nodes.button_sensor:

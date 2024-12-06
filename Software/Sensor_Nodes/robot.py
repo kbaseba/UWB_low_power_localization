@@ -1,11 +1,19 @@
 # Imports
 
+from .sensor_nodes import SensorNodes
+from .Instruction_execution.instruction_execution import InstructionExecution
+from .Instruction_execution.move_robot import MoveRobot
+from .power_harvest import PowerHarvest
+from .transmit_data import TransmitData
+from .uwb_localization import UWBLocalization
+
+
 # This class represents a robot with various capabilities, including movement, data transmission,
 # power harvesting, and role-based tasks. It integrates multiple components to simulate a robot's
 # behavior in a dynamic environment.
 class Robot:
-    def __init__(self, id = 0, position = (0, 0), sector = 0, orientation = (0, 0), power_level = 100, role = "non-leader", power_threshold = (10, 50), data_receiver = None,
-                  executor = None, sensors = None, power_harvester = None, data_transmitter = None, uwb_transmitter = None):
+    def __init__(self, id = 0, position = (0, 0), sector = 0, orientation = (0, 0), power_level = 100, role = "non-leader", threshold = (10, 50), duty_cycle = 0, 
+                 motor_power_consum = 0, velocity = 0, efficacy = 0, ble_power_consum = 0, uwb_power_consum = 0):
         """
         Initializes a robot instance with its components and initial state.
 
@@ -30,34 +38,32 @@ class Robot:
         self.power_level = power_level  # Remaining power level (max 100)
         self.role = role  # Role of the robot (e.g., leader/non-leader)
         self.mode = "active" # Mode of the robot (e.g., active/low power)
-        self.power_threshold = power_threshold # Power Threshold for low power mode
+        self.power_threshold = threshold # Power Threshold for low power mode
 
         # Components responsible for specific robot tasks
-        self.data_receiver = data_receiver
-        self.executor = executor
-        self.sensors = sensors
-        self.power_harvester = power_harvester
-        self.data_transmitter = data_transmitter
-        self.uwb_transmitter = uwb_transmitter
+        self.executor = InstructionExecution(MoveRobot(motor_power_consum, velocity))
+        self.sensors = SensorNodes()
+        self.power_harvester = PowerHarvest(efficacy)
+        self.data_transmitter = TransmitData(ble_power_consum, duty_cycle)
+        self.uwb_transmitter = UWBLocalization(uwb_power_consum)
 
-    def move(self):
+    def move(self, map, robots):
         """
         Updates the robot's position based on its movement capabilities.
         This method triggers sensor updates and executes assigned tasks.
         """
-        self.sensors.update()  # Update sensor readings
-        self.executor.update()  # Execute movement
+        self.sensors.update(self, map, robots)  # Update sensor readings
+        self.executor.update(self)  # Execute movement
 
-    def update(self, map, instruction = None):
+    def update(self, map, robots):
         """
         Updates the robot's state by refreshing sensor data, harvesting power,
         transmitting data, and handling UWB localization signals.
         """
-        self.sensors.update(self, map)  # Refresh sensor readings
+        self.sensors.update(self, map, robots)  # Refresh sensor readings
         self.power_harvester.update(self)  # Harvest power based on light intensity
         self.data_transmitter.update(self)  # Handle data transmission
         self.uwb_transmitter.update(self)  # Activate or deactivate UWB localization
-        self.data_receiver.update(self, instruction)  # Parse and execute received instructions
         # Check if the robot enters lower power mode from active
         if self.mode == "active" and self.power_level < self.power_threshold[0]:
             self.mode = "low power"
@@ -69,7 +75,7 @@ class Robot:
                 "mode": self.mode,
                 "power_level": self.power_level,
                 "light_intensity": self.sensors.light_intensity,
-                "button_sensor_state": self.senser_nodes.button_sensor
+                "button_sensor_state": self.sensors.button_sensor
             }
         elif self.mode == "low power" and self.power_level > self.power_threshold[1]:
             self.mode = "active"
@@ -81,5 +87,5 @@ class Robot:
                 "mode": self.mode,
                 "power_level": self.power_level,
                 "light_intensity": self.sensors.light_intensity,
-                "button_sensor_state": self.senser_nodes.button_sensor
+                "button_sensor_state": self.sensors.button_sensor
             }

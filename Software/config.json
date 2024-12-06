@@ -7,6 +7,15 @@
     "num_sectors": 16,
     "total_num_sensor_nodes": 50,
     "node_range": 10,
-    "random_seed": 42
+    "random_seed": 42,
+
+    "min_power_threshold": 10,
+    "max_power_threshold": 50,
+    "duty_cycle": 5,
+    "efficacy": 0.5,
+    "motor_power_consum": 0.5,
+    "velocity": 1,
+    "ble_power_consum": 0.5,
+    "uwb_power_consum": 0.5
 
 }

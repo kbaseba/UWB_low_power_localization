@@ -45,5 +45,5 @@ class TransmitData:
                 "mode": robot.mode,
                 "power_level": robot.power_level,
                 "light_intensity": robot.sensors.light_intensity,
-                "button_sensor_state": robot.senser_nodes.button_sensor
+                "button_sensor_state": robot.sensors.button_sensor
             }

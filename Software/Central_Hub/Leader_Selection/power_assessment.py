@@ -16,6 +16,12 @@ class PowerAssessment:
         # Update leaders for each sector
         self.current_leaders = {}
         for sector_coords, robots_in_sector in sector_robots.items():
+            # Check if there is already a leader in the sector
+            has_leader = any(robot.role == "leader" for robot in robots_in_sector)
+            if has_leader:
+                # Skip assigning a new leader if a leader already exists
+                continue
+            
             # Get the upper power threshold from any robot (all are the same)
             upper_threshold = robots_in_sector[0].power_threshold[1] if robots_in_sector else None
 
