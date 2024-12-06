@@ -82,8 +82,7 @@ class SensorNodes:
                     if -90 <= angle <= 90:
                         self.button_sensor = True
                         return  # Exit loop after detecting collision
-        else:
-            # If no collision is detected, reset the button sensor to False
-            self.button_sensor = False
+        # If no collision is detected, reset the button sensor to False
+        self.button_sensor = False
 
 
