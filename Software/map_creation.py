@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Circle, Polygon
 from shapely.geometry import Polygon as ShapelyPolygon, box
 
-from testbesnch_tools import simulation_configuration_setup
+from testbench_tools import simulation_configuration_setup
 from Central_Hub.Sector_Assignment.sector_assignment import SectorAssignment
 from Central_Hub.Leader_Selection.leader_selection import LeaderSelection
 
