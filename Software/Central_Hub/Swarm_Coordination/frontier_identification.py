@@ -41,7 +41,7 @@ class FrontierIdentification:
     def update_map_matrix(self):
         for robot in self.Hub.robots:
             for point in robot.estimate_history:
-                [i,j] = self.conv_map_to_matrix(point[0],point[1])
+                [i,j] = self.conv_map_to_matrix(point[0,0],point[1,0])
                 self.map_matrix[i,j] = 1
 
         for point in self.Hub.collisions:
@@ -80,7 +80,7 @@ class FrontierIdentification:
                     if(p==0 and q==0):
                         continue
                     if((i_frontier+p >= 0) and (i_frontier+p <= self.matrix_height-1) and (j_frontier+q >= 0) and (j_frontier+q <= self.matrix_width-1)):
-                        if(M[i_frontier+p,j_frontier+q] == 0):
+                        if(self.map_matrix[i_frontier+p,j_frontier+q] == 0):
                             neighbour_count += 1
             
             self.information_gain[i] = neighbour_count
@@ -90,7 +90,7 @@ class FrontierIdentification:
         for i in range(len(self.frontier_set)):
             frontier_point = self.frontier_set[i]
             robot_location = self.Hub.robots[self.Robot.id].estimate_history[-1]
-            robot_location = self.conv_map_to_matrix(robot_location[0],robot_location[1])
+            robot_location = self.conv_map_to_matrix(robot_location[0,0],robot_location[1,0])
             self.path_length[i] = np.sqrt((robot_location[0]-frontier_point[0])*2 + (robot_location[1]-frontier_point[1])*2)
     
     def find_cost_function(self):
@@ -103,7 +103,7 @@ class FrontierIdentification:
     def find_optimal_frontier(self):
         CF_min = np.inf
         i_min = -1
-        for i in len(self.cost_function):
+        for i in range(len(self.cost_function)):
             if(self.cost_function[i] < CF_min):
                 CF_min = self.cost_function[i]
                 i_min = i

@@ -4,21 +4,21 @@ import numpy as np
 from .frontier_identification import FrontierIdentification
 
 class PotentialFieldComputation:
-    def __init__(self, map, c=10, delta=0.001, phi_num=1, hub = None, robot = None):
+    def __init__(self, map, c=1, delta=0.001, phi_num=1, hub = None, robot = None):
         self.FrontierIdentification = FrontierIdentification(map_height=map.height, map_width=map.width, hub = hub, robot = robot)
         self.FrontierIdentification.update()
         self.optimal_frontier = self.FrontierIdentification.optimal_frontier
         self.c = c
         self.delta = delta
         self.phi_num = phi_num
+        self.theta = 0
+        self.Hub = hub
+        self.Robot = robot
         self.num_obs = self.find_num_obs()
         self.F_goal = np.array([0,0])
         self.F_boundary = np.array([0,0])
         self.F_obstacle = np.array([0,0])
         self.F_net = np.array([0,0])
-        self.theta = 0
-        self.Hub = hub
-        self.Robot = robot
     
     def update(self):
         self.find_attractive_force()
@@ -58,8 +58,8 @@ class PotentialFieldComputation:
                 phi_max = phi_obs[i]
                 i_max = i
 
-        Fx_obstacle = (phi_max/(1+np.sqrt((robot_location[0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1]-self.Hub.collisions[i_max][1])**2))**2)*(1/np.sqrt((robot_location[0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1]-self.Hub.collisions[i_max][1])**2))*(robot_location[0]-self.Hub.collisions[i_max][0])
-        Fy_obstacle = (phi_max/(1+np.sqrt((robot_location[0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1]-self.Hub.collisions[i_max][1])**2))**2)*(1/np.sqrt((robot_location[0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1]-self.Hub.collisions[i_max][1])**2))*(robot_location[1]-self.Hub.collisions[i_max][1])
+        Fx_obstacle = (phi_max/(1+np.sqrt((robot_location[0,0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1,0]-self.Hub.collisions[i_max][1])**2))**2)*(1/(self.delta+np.sqrt((robot_location[0,0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1,0]-self.Hub.collisions[i_max][1])**2)))*(robot_location[0,0]-self.Hub.collisions[i_max][0])
+        Fy_obstacle = (phi_max/(1+np.sqrt((robot_location[0,0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1,0]-self.Hub.collisions[i_max][1])**2))**2)*(1/(self.delta+np.sqrt((robot_location[0,0]-self.Hub.collisions[i_max][0])**2 + (robot_location[1,0]-self.Hub.collisions[i_max][1])**2)))*(robot_location[1,0]-self.Hub.collisions[i_max][1])
         self.F_obstacle[0] = Fx_obstacle
         self.F_obstacle[1] = Fy_obstacle
 

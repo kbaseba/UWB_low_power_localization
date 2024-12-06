@@ -11,4 +11,4 @@ class SwarmCoordination:
                 print(self.hub.robots[data["id"]].orientation)
                 PotentialFieldComputation(map=map,hub=self.hub, robot=self.hub.robots[data["id"]]).update()
                 print(self.hub.robots[data["id"]].orientation)
-                self.hub.robots[data["id"]].excutor.motor.state = True
+                self.hub.robots[data["id"]].executor.motor.state = True
