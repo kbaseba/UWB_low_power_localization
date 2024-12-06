@@ -1,4 +1,5 @@
 # Imports
+from numpy import random
 
 # Class comment
 class Anchor:
@@ -12,5 +13,6 @@ class Anchor:
         for robot in robots:
             #If the uwb_transmitter signal is True, update position
             if robot.uwb_transmitter.state:
-                return robot.id, robot.position
+                measuredPosition = random.normal(robot.position, 0.01)
+                return robot.id, measuredPosition
         
