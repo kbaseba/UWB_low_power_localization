@@ -197,8 +197,7 @@ class Map:
             y_history = [state[1, 0] for state in robot.estimate_history]  # y-coordinates over time
 
             # Plot the trajectory as a connected line
-            self.ax2.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
-
+            self.ax1.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
 
 
         # Set self.axis limits and title

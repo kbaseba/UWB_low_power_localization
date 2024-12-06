@@ -1,5 +1,7 @@
 # Imports
 import math
+import numpy as np
+
 # This class moves the robot in its current orientation and updates its power level accordingly.
 class MoveRobot:
     def __init__(self, motor_power_consum = 1, velocity = 0.1):
@@ -13,8 +15,8 @@ class MoveRobot:
         self.motor_power_consum = motor_power_consum
         self.velocity = velocity
         self.state = True  # Indicates whether the robot can move.
-
-    def update(self, robot, map, robots):
+    
+    def update(self, robot, map, robots, system_simulator):
         """
         Updates the robot's position and power level.
 
@@ -32,17 +34,23 @@ class MoveRobot:
             if robot.sensors.button_sensor:
                 # Reverse movement
                 robot.position = (
-                    robot.position[0] - self.velocity * math.cos(robot.orientation),
-                    robot.position[1] - self.velocity * math.sin(robot.orientation)
+                    robot.position[0] - self.velocity * math.cos((robot.orientation/360)*2*math.pi),
+                    robot.position[1] - self.velocity * math.sin((robot.orientation/360)*2*math.pi)
                 )
+                # robot.orientation = (robot.orientation + 180) % 360
+                # _, position = system_simulator.update(u=np.array((robot.orientation % 360) * (np.pi / 180)).reshape(1, 1), v=robot.velocity, theta=(robot.orientation % 360) * (np.pi / 180))
+                # robot.position = (position[0][0], position[1][0])
                 self.state = False
             else:
                 # Forward movement
                 robot.position = (
-                    robot.position[0] + self.velocity * math.cos(robot.orientation),
-                    robot.position[1] + self.velocity * math.sin(robot.orientation)
+                    robot.position[0] + self.velocity * math.cos((robot.orientation/360)*2*math.pi),
+                    robot.position[1] + self.velocity * math.sin((robot.orientation/360)*2*math.pi)
                 )
-        # Update sensor readings after movement
+                # _, position = system_simulator.update(u=np.array((robot.orientation % 360) * (np.pi / 180)).reshape(1, 1), v=robot.velocity, theta=(robot.orientation % 360) * (np.pi / 180))
+                # robot.position = (position[0][0], position[1][0])
+
+            # Update sensor readings after movement
             robot.sensors.update(robot, map, robots)
         
 

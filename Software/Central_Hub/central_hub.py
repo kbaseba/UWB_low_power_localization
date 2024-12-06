@@ -13,11 +13,11 @@ class CentralHub:
         self.map = map
         self.leader_nodes = None
         self.sector_assignment = SectorAssignment(self.map.width, self.map.height, num_sectors, total_num_sensor_nodes, node_range, self.map.obstacles, 
-                                                  threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum)
+                                                  threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
         self.leader_selection = LeaderSelection()
         self.sectors, self.hub = self.sector_assignment.update()
 
-        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [0], [robot.executor.motor.velocity]])) for robot in self.hub.robots]
+        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [robot.velocity]])) for robot in self.hub.robots]
         # self.mapping = Mapping()
         # self.swarm_coordination = SwarmCoordination()
         
@@ -35,9 +35,9 @@ class CentralHub:
         for i, estimator in enumerate(self.estimators):
             if self.hub.robots[i].just_localized == True:
                 self.hub.robots[i].just_localized = False
-                x̂, P, r, A = estimator.update(u=np.array(self.hub.robots[i].orientation).reshape(1, 1), z=np.array(self.hub.localizations[i]))
+                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.localizations[i]))
             else:
-                x̂, P, r, A = estimator.update(u=np.array(self.hub.robots[i].orientation).reshape(1, 1), z=None)
+                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=None)
             self.hub.robots[i].estimate_history.append(x̂)
 
         # self.mapping.update(self.hub.robots)

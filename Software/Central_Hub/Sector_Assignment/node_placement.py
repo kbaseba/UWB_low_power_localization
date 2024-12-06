@@ -21,9 +21,9 @@ class NodePlacement:
         self.map_width = map_width
         self.map_height = map_height
 
-    def update(self, sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum):
+    def update(self, sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R):
         # Place robots in sectors
-        robots = self.place_robots(sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum)
+        robots = self.place_robots(sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
 
         # Place anchors at the vertices of the map
         anchors = self.place_anchors()
@@ -57,7 +57,7 @@ class NodePlacement:
                     return False
         return True
 
-    def place_robots(self, sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum):
+    def place_robots(self, sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R):
         """
         Place nodes randomly within the bounds of each sector, avoiding obstacles,
         and instantiate them as Robot objects.
@@ -87,11 +87,11 @@ class NodePlacement:
                 y = np.random.uniform(y_start, y_end)
                 if self.is_valid_position(x, y):
                     # Create a Robot instance for the valid position
-                    robot = Robot(
+                    robot = Robot(dt, Q, R,
                         id=robot_id,
                         position=(x, y),
                         sector=sector,
-                        orientation=30,  # Default orientation
+                        orientation=np.random.uniform(0, 360),  # Default orientation
                         power_level=np.random.uniform(50, 100),  # Random initial power level
                         threshold=threshold,
                         duty_cycle=duty_cycle,

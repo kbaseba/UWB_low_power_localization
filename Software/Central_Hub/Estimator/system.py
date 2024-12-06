@@ -1,4 +1,4 @@
-from numpy import ndarray, zeros, atleast_1d, atleast_2d, reshape, arange, array
+from numpy import ndarray, zeros, atleast_1d, atleast_2d, reshape, arange, array, pi
 import matplotlib.pyplot as plt
 from numpy.random import multivariate_normal
 
@@ -29,9 +29,12 @@ class System:
         x, u = atleast_1d(x), atleast_1d(u)
         w = noise(self.Q, noisy)
         w = reshape(w, (w.shape[0], 1))
+
+        theta = u[0, 0] * (pi / 180)
+
         x = self.Φ @ x + self.B @ u + w
-        # Directly set θ to θ_target (u)
-        x[2, 0] = u[0, 0]
+
+        x[2, 0] = theta
         return x, w
 
     def update(self, x: ndarray, u: ndarray, noisy: bool) -> 'tuple[ndarray, ndarray, ndarray, ndarray]':
