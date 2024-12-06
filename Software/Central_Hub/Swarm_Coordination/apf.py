@@ -21,6 +21,7 @@ s = np.transpose(np.array([x,y])) # robot's state
     # xb1, xb2, yb1, yb2
     # (x_obs,y_obs)[k]
     # Velocity Magnitude v0
+    # dt -> time step
 
 # Attractive Potential
 phi_goal = c*np.sqrt((x-x_goal)**2 + (y-y_goal)**2)
