@@ -1,8 +1,10 @@
 import numpy as np
 import json
+import os
 
 # Load configuration from JSON file
 def load_config(config_path):
+    config_path = os.path.join(os.path.dirname(__file__), config_path)
     with open(config_path, 'r') as f:
         return json.load(f)
     
