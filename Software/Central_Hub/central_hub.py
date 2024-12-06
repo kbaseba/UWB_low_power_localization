@@ -31,7 +31,7 @@ class CentralHub:
             robot.update(self.map, self.hub.robots)
 
         self.hub.receiveData()
-        self.hub.UWBLocalization()
+        # self.hub.UWBLocalization()
         
         for i, estimator in enumerate(self.estimators):
             if self.hub.robots[i].just_localized == True:
