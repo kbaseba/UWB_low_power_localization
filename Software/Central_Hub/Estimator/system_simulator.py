@@ -7,7 +7,7 @@ from .model import RobotDynamics
 from .plant import Plant
 
 class SystemSimulator:
-    def __init__(self, dt, Q, R, x0, noisy=False):
+    def __init__(self, dt, Q, R, x0, noisy):
         # Model initialization
         self.model = RobotDynamics(dt, Q, R)
 

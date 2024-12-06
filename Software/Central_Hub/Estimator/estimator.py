@@ -12,7 +12,7 @@ from .system_simulator import SystemSimulator
 class Estimator:
     def __init__(self, dt, Q, R, x0):
         # Dynamic System Simulator initialization for state estimator
-        self.SystemSimulator = SystemSimulator(dt, Q, R, x0)
+        self.SystemSimulator = SystemSimulator(dt, Q, R, x0, noisy=False)
 
         # state Estimator update initialization
         self.EstimatorUpdate = EstimatorUpdate(self.SystemSimulator.model, eye(self.SystemSimulator.model.Φ.shape[1]), x0)

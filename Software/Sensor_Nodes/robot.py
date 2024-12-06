@@ -1,5 +1,7 @@
 # Imports
+import numpy as np
 
+from Central_Hub.Estimator.system_simulator import SystemSimulator
 from .sensor_nodes import SensorNodes
 from .Instruction_execution.instruction_execution import InstructionExecution
 from .Instruction_execution.move_robot import MoveRobot
@@ -12,7 +14,7 @@ from .uwb_localization import UWBLocalization
 # power harvesting, and role-based tasks. It integrates multiple components to simulate a robot's
 # behavior in a dynamic environment.
 class Robot:
-    def __init__(self, id = 0, position = (0, 0), sector = 0, orientation = 0, power_level = 100, role = "non-leader", threshold = (10, 50), duty_cycle = 0, 
+    def __init__(self, dt, Q, R, id = 0, position = (0, 0), sector = 0, orientation = 0, power_level = 100, role = "non-leader", threshold = (10, 50), duty_cycle = 0, 
                  motor_power_consum = 0, velocity = 0, efficacy = 0, ble_power_consum = 0, uwb_power_consum = 0):
         """
         Initializes a robot instance with its components and initial state.
@@ -41,13 +43,17 @@ class Robot:
         self.power_threshold = threshold # Power Threshold for low power mode
         self.just_localized = False
         self.estimate_history = []
+        self.velocity = velocity
 
         # Components responsible for specific robot tasks
-        self.executor = InstructionExecution(MoveRobot(motor_power_consum, velocity))
         self.sensors = SensorNodes()
         self.power_harvester = PowerHarvest(efficacy)
         self.data_transmitter = TransmitData(ble_power_consum, duty_cycle)
         self.uwb_transmitter = UWBLocalization(uwb_power_consum)
+
+        self.system_simulator = SystemSimulator(dt, Q, R, np.array([[self.position[0]], [self.position[1]], [self.orientation], [self.velocity]]), True)
+        
+        self.executor = InstructionExecution(self.system_simulator, MoveRobot(motor_power_consum, velocity))
 
     def move(self, map, robots):
         """
