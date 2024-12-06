@@ -14,6 +14,8 @@ class Hub:
         self.anchors = anchors
         self.robots = robots
 
+        self.collisions = []
+
         #Dictionary to store robot data by robot id
         self.robotData = [None for _ in range(len(self.robots))]
 
@@ -26,7 +28,7 @@ class Hub:
             #Is the robot is in the transmission state
             if robot.data_transmitter.state:
                 #Store the data in the hub's data dictionary
-                self.robotData[robot.id] = robot.data_transmitter
+                self.robotData[robot.id] = robot.data_transmitter.data
 
 
     def UWBLocalization(self):

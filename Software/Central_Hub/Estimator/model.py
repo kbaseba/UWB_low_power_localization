@@ -8,7 +8,7 @@ class RobotDynamics(System):
     """
     def __init__(self, dt, Q, R):
         self.dt = dt  # Time step
-        self.Φ = np.zeros((4, 4))  # State transition matrix
+        self.Φ = np.eye(4)  # State transition matrix
         self.B = np.array([
             [0],     # No control input affects x
             [0],     # No control input affects y

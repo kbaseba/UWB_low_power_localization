@@ -18,7 +18,7 @@ class CentralHub:
         self.sectors, self.hub = self.sector_assignment.update()
 
         self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [robot.velocity]])) for robot in self.hub.robots]
-        # self.mapping = Mapping()
+        self.mapping = Mapping(self.hub)
         # self.swarm_coordination = SwarmCoordination()
         
     def update(self, frame=None):
@@ -31,34 +31,17 @@ class CentralHub:
             robot.update(self.map, self.hub.robots)
 
         self.hub.receiveData()
-
+        
         for i, estimator in enumerate(self.estimators):
             if self.hub.robots[i].just_localized == True:
                 self.hub.robots[i].just_localized = False
-                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.localizations[i]))
+                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.robots[i].position).reshape(2, 1))
             else:
-                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=None)
+                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.robots[i].position).reshape(2, 1))
             self.hub.robots[i].estimate_history.append(x̂)
 
-        # self.mapping.update(self.hub.robots)
+        self.mapping.update()
         # self.swarm_coordination.update(self.hub.robots)
-
-
-
-        
-
-
-        
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -90,6 +73,6 @@ class CentralHub:
         #         print(f"Sector: {sector}, No leader assigned")
 
         
-        self.map.update(sectors=self.sectors, robots=self.hub.robots, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
+        self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
 
 

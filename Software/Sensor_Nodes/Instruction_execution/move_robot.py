@@ -33,22 +33,28 @@ class MoveRobot:
         if self.state:
             if robot.sensors.button_sensor:
                 # Reverse movement
+                # robot.position = (
+                #     robot.position[0] - self.velocity * math.cos((robot.orientation/360)*2*math.pi),
+                #     robot.position[1] - self.velocity * math.sin((robot.orientation/360)*2*math.pi)
+                # )
+                robot.orientation = (robot.orientation + 180) % 360
+                _, z = system_simulator.update(u=np.array((robot.orientation % 360) * (np.pi / 180)).reshape(1, 1), v=robot.velocity, theta=(robot.orientation % 360) * (np.pi / 180))
                 robot.position = (
-                    robot.position[0] - self.velocity * math.cos((robot.orientation/360)*2*math.pi),
-                    robot.position[1] - self.velocity * math.sin((robot.orientation/360)*2*math.pi)
-                )
-                # robot.orientation = (robot.orientation + 180) % 360
-                # _, position = system_simulator.update(u=np.array((robot.orientation % 360) * (np.pi / 180)).reshape(1, 1), v=robot.velocity, theta=(robot.orientation % 360) * (np.pi / 180))
-                # robot.position = (position[0][0], position[1][0])
+                    max(0, min(map.light_map.shape[0] - 1, z[0][0])),
+                    max(0, min(map.light_map.shape[1] - 1, z[1][0]))
+                )   
                 self.state = False
             else:
                 # Forward movement
+                # robot.position = (
+                #     robot.position[0] + self.velocity * math.cos((robot.orientation/360)*2*math.pi),
+                #     robot.position[1] + self.velocity * math.sin((robot.orientation/360)*2*math.pi)
+                # )
+                _, z = system_simulator.update(u=np.array((robot.orientation % 360) * (np.pi / 180)).reshape(1, 1), v=robot.velocity, theta=(robot.orientation % 360) * (np.pi / 180))
                 robot.position = (
-                    robot.position[0] + self.velocity * math.cos((robot.orientation/360)*2*math.pi),
-                    robot.position[1] + self.velocity * math.sin((robot.orientation/360)*2*math.pi)
-                )
-                # _, position = system_simulator.update(u=np.array((robot.orientation % 360) * (np.pi / 180)).reshape(1, 1), v=robot.velocity, theta=(robot.orientation % 360) * (np.pi / 180))
-                # robot.position = (position[0][0], position[1][0])
+                    max(0, min(map.light_map.shape[0] - 1, z[0][0])),
+                    max(0, min(map.light_map.shape[1] - 1, z[1][0]))
+                )   
 
             # Update sensor readings after movement
             robot.sensors.update(robot, map, robots)

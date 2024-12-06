@@ -150,7 +150,7 @@ class Map:
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
     
-    def update(self, robots, sectors, sensor_node_positions, anchor_positions, hub_position):
+    def update(self, sectors, robots, hub, sensor_node_positions, anchor_positions, hub_position):
         # Clear the axis and redraw
         self.ax1.clear()
         self.ax2.clear()
@@ -197,7 +197,10 @@ class Map:
             y_history = [state[1, 0] for state in robot.estimate_history]  # y-coordinates over time
 
             # Plot the trajectory as a connected line
-            self.ax1.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
+            self.ax2.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
+        
+        for x,y in hub.collisions:
+            self.ax2.plot(x, y, 'o', markersize=2, color='red')
 
 
         # Set self.axis limits and title

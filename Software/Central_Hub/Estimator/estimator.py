@@ -23,10 +23,10 @@ class Estimator:
     
     def update(self, u: ndarray, z: ndarray):
         if self.x̂_ is None:
-            v = 0.0
+            v = 1.0
             theta = float(u[0, 0])
         else:
-            v = float(self.x̂_[3])
+            v = float(self.x̂_[3][-1])
             theta = float(u[0, 0])
 
         # State estimate before the measurement update phase
