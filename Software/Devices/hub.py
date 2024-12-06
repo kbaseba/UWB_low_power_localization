@@ -20,14 +20,15 @@ class Hub:
         #Dictionary for UWB localizations, keyed by robot id
         self.localizations = [[] for _ in range(len(self.robots))]
 
+        self.collisions = []
+
     def receiveData(self):
         #Checking all robots for data transmission
         for robot in self.robots:
             #Is the robot is in the transmission state
             if robot.data_transmitter.state:
                 #Store the data in the hub's data dictionary
-                self.robotData[robot.id] = robot.data_transmitter
-
+                self.robotData[robot.id] = robot.data_transmitter.data
 
     def UWBLocalization(self):
         #measuring location from each anchor
@@ -50,3 +51,5 @@ class Hub:
 
         #Update the three anchors, localizing leader robot
         self.UWBLocalization()
+
+

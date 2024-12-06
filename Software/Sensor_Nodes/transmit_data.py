@@ -24,7 +24,6 @@ class TransmitData:
             robot (object): The robot object being updated.
             power_threshold (float): Threshold for low power mode.
         """
-        self.iter += 1
         # Check if the data has been sent due to collision
         if self.state: #If data is already transmitted, skip further action
             return
@@ -47,3 +46,4 @@ class TransmitData:
                 "light_intensity": robot.sensors.light_intensity,
                 "button_sensor_state": robot.sensors.button_sensor
             }
+        self.iter += 1
