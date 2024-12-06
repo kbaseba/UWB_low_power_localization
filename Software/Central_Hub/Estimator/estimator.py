@@ -26,7 +26,7 @@ class Estimator:
             v = 0.0
             theta = float(u[0, 0])
         else:
-            v = self.x̂_[3]
+            v = float(self.x̂_[3])
             theta = float(u[0, 0])
 
         # State estimate before the measurement update phase

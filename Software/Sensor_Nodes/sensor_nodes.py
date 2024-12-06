@@ -22,7 +22,7 @@ class SensorNodes:
 
         # Check for collisions with boundaries
 
-        if robot.position[0] < 0 or robot.position[0] >= map.width-1 or robot.position[1] < 0 or robot.position[1] >= map.height-1:
+        if robot.position[0]+math.cos(robot.orientation) < 0 or robot.position[0]+math.cos(robot.orientation) >= map.width-1 or robot.position[1]+math.sin(robot.orientation) < 0 or robot.position[1]+math.sin(robot.orientation) >= map.height-1:
             self.button_sensor = True
             return
 
