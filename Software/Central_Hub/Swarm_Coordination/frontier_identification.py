@@ -1,91 +1,108 @@
 # Imports
 import numpy as np
-from Devices.robot import Robot
+from Devices.hub import Hub
+from Sensor_Nodes.robot import Robot
 
 # Class comment
 class FrontierIdentification:
-    def __init__(self, map_width, map_height, matrix_width, matrix_height, ):
+    def __init__(self, map_height, map_width, matrix_height = 100, matrix_width = 100, alpha = 1, beta = 1, Imax = 1, Lmax = 1, Hub, Robot):
+        self.map_height = map_height
+        self.map_width = map_width
         self.matrix_height = matrix_height
         self.matrix_width = matrix_width
-        self.xstate =
-
+        self.map_matrix = np.zeros((self.matrix_height,self.matrix_width))
+        self.frontier_set = []
+        self.information_gain = []
+        self.path_length = []
+        self.cost_function = []
+        self.optimal_frontier = ()
+        self.alpha = alpha
+        self.beta = beta
+        self.Imax = 8
+        self.Lmax = np.sqrt(self.map_height**2 + self.map_width**2)
+        self.Hub = Hub
+        self.Robot = Robot
+    
     def update(self):
-        pass
+        self.update_map_matrix(self)
+        self.update_frontier_set(self)
+        self.find_information_gain(self)
+        self.find_path_length(self)
+        self.find_cost_function(self)
+        self.find_optimal_frontier(self)
 
-import numpy as np
+    def conv_map_to_matrix(x_map,y_map):
+        j_matrix = round((x_map/self.map_width)*(self.matrix_width - 1))
+        i_matrix = (self.matrix_height - 1) - round((y_map/self.map_height)*(self.matrix_height - 1))
+        return [i_matrix,j_matrix]
 
-x = xr # current x-coordinate of the robot's position
-y = yr # current y-coordinate of the robot's position
-s = np.transpose(np.array([x,y])) # robot's state
+    def update_map_matrix(self):
+        for robot in self.Hub.robots:
+            for point in robot.estimate_history:
+                [i,j] = self.conv_map_to_matrix(point[0],point[1])
+                self.map_matrix[i,j] = 1
 
-# Parameters required:
-    # Grid Size m x n
-    # Metric weights: alpha & beta
-    # Normalization Parameters: Imax & Lmax
-
-# Current Environment Map modelled as a matrix
-M = np.zeros((m,n)) 
-
-if(is_obstacle == True):
-    M[xr,yr] = 2
-else:
-    M[xr,yr] = 1
-
-# Frontier Set creation
-F = []
-
-for i in range(m):
-    for j in range(n):
-        
-        if(M[i,j] == 1):
-            
-            flag = 0
-            
+        for point in self.Hub.collisions:
+            [i,j] = self.conv_map_to_matrix(point[0],point[1])
+            self.map_matrix[i,j] = 2
+    
+    def update_frontier_set(self):
+        for i in range(self.matrix_height):
+            for j in range(self.matrix_width):
+                
+                if(self.map_matrix[i,j] == 1):
+                    
+                    flag = 0
+                    
+                    for p in [-1,0,1]:
+                        for q in [-1,0,1]:
+                            if(p==0 and q==0):
+                                continue
+                            if((i+p >= 0) and (i+p <= self.matrix_height-1) and (j+q >= 0) and (j+q <= self.matrix_width-1)):
+                                if(self.map_matrix[i+p,j+q] == 0):
+                                    flag = 1
+                                    break
+                    
+                    if(flag == 1):
+                        self.frontier_set.append((i,j))
+    
+    def find_information_gain(self):
+        self.information_gain = [0 for _ in range(len(self.frontier_set))]
+        for i in range(len(self.frontier_set)):
+            frontier_point = self.frontier_set[i]
+            [i_frontier,j_frontier] = self.conv_map_to_matrix(frontier_point[0],frontier_point[1])
+            neighbour_count = 0
             for p in [-1,0,1]:
                 for q in [-1,0,1]:
                     if(p==0 and q==0):
                         continue
-                    if((i+p >= 0) and (i+p <= m-1) and (j+q >= 0) and (j+q <= n-1)):
-                        if(M[i+p,j+q] == 0):
-                            flag = 1
+                    if((i_frontier+p >= 0) and (i_frontier+p <= m-1) and (j_frontier+q >= 0) and (j_frontier+q <= n-1)):
+                        if(M[i_frontier+p,j_frontier+q] == 0):
+                            neighbour_count += 1
             
-            if(flag == 1):
-                F.append((i,j))
+            self.information_gain[i] = neighbour_count
 
-# Calculate Information Gain and Path Length
-IG = [0 for _ in range(len(F))]
-PL = [0 for _ in range(len(F))]
-
-for i in range(len(F)):
-    f = F[i]
-    xf = f[0]
-    yf = f[1]
+    def find_path_length(self):
+        self.path_length = [0 for _ in range(len(self.frontier_set))]
+        for i in range(len(self.frontier_set)):
+            frontier_point = self.frontier_set[i]
+            robot_location = self.Hub.robots[self.Robot.id].estimate_history[-1]
+            #[i_frontier,j_frontier] = self.conv_map_to_matrix(frontier_point[0],frontier_point[1])
+            self.path_length[i] = np.sqrt((robot_location[0]-frontier_point[0])**2 + (robot_location[1]-frontier_point[1])**2)
     
-    PL[i] = np.sqrt((xr-xf)**2 + (yr-yf)**2) # Path Length
+    def find_cost_function(self):
+        self.cost_function = np.zeros(len(self.frontier_set))
+        IG = np.array(self.information_gain)
+        PL = np.array(self.path_length)
+        self.cost_function = (-1*self.alpha*IG/self.Imax) + (self.beta*PL/self.Lmax)
+        self.cost_function = list(self.cost_function)
     
-    count = 0
-    for p in [-1,0,1]:
-        for q in [-1,0,1]:
-            if(p==0 and q==0):
-                continue
-            if((xf+p >= 0) and (xf+p <= m-1) and (yf+q >= 0) and (yf+q <= n-1)):
-                if(M[xf+p,yf+q] == 0):
-                    count += 1
-    
-    IG[i] = count
+    def find_optimal_frontier(self):
+        CF_min = np.inf
+        i_min = -1
+        for i in len(self.cost_function):
+            if(self.cost_function[i] < CF_min):
+                CF_min = self.cost_function[i]
+                i_min = i
 
-# Cost Function
-IG = np.array(IG)
-PL = np.array(PL)
-CF = list(((-alpha/Imax)*IG) + ((beta/Lmax)*PL))
-
-CF_min = np.inf
-i_min = -1
-
-for i in len(CF):
-    if(CF[i] < CF_min):
-        CF_min = CF[i]
-        i_min = i
-
-# Optimal Frontier
-fopt = F[i_min]
+        self.optimal_frontier = self.frontier_set[i_min]
