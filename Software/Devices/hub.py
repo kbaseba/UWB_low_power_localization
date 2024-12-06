@@ -15,11 +15,10 @@ class Hub:
         self.robots = robots
 
         #Dictionary to store robot data by robot id
-        self.robotData = {}
+        self.robotData = [None for _ in range(len(self.robots))]
 
         #Dictionary for UWB localizations, keyed by robot id
-        self.localizations = {}
-        pass
+        self.localizations = [[] for _ in range(len(self.robots))]
 
     def receiveData(self):
         #Checking all robots for data transmission

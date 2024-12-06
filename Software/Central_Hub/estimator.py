@@ -1,7 +1,7 @@
 # Imports
 
 # Class comment
-class DataReception:
+class Estimator:
     def __init__(self):
         pass
 
