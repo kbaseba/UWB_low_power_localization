@@ -3,37 +3,38 @@
 from .Sector_Assignment.sector_assignment import SectorAssignment
 from .Leader_Selection.leader_selection import LeaderSelection
 from .data_reception import DataReception
-from .Estimator.estimator import Estimator
+# from .Estimator.estimator import Estimator
 from .mapping import Mapping
 from .Swarm_Coordination.swarm_coordination import SwarmCoordination
 
 # Class comment
 class CentralHub:
-    def __init__(self, map, num_sectors, total_num_sensor_nodes, node_range):
+    def __init__(self, map, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum):
         self.map = map
         self.leader_nodes = None
-        self.sector_assignment = SectorAssignment(self.map.width, self.map.height, num_sectors, total_num_sensor_nodes, node_range, self.map.obstacles)
+        self.sector_assignment = SectorAssignment(self.map.width, self.map.height, num_sectors, total_num_sensor_nodes, node_range, self.map.obstacles, 
+                                                  threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum)
         self.leader_selection = LeaderSelection()
         self.sectors, self.hub = self.sector_assignment.update()
 
-        self.data_reception = DataReception()
-        self.estimator = Estimator()
-        self.mapping = Mapping()
-        self.swarm_coordination = SwarmCoordination()
+        # self.data_reception = DataReception()
+        # self.estimator = Estimator()
+        # self.mapping = Mapping()
+        # self.swarm_coordination = SwarmCoordination()
         
     def update(self):
         self.leader_nodes = self.leader_selection.update(self.hub.robots)
 
         for robot in self.hub.robots:
-            robot.move()
+            robot.move(self.map, self.hub.robots)
 
         for robot in self.hub.robots:
-            robot.update()
+            robot.update(self.map, self.hub.robots)
 
-        self.data_reception.update(self.hub.robots)
-        self.estimator.update(self.hub.robots)
-        self.mapping.update(self.hub.robots)
-        self.swarm_coordination.update(self.hub.robots)
+        # self.data_reception.update(self.hub.robots)
+        # self.estimator.update(self.hub.robots)
+        # self.mapping.update(self.hub.robots)
+        # self.swarm_coordination.update(self.hub.robots)
 
 
         

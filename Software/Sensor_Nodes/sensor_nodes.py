@@ -9,7 +9,7 @@ class SensorNodes:
         self.light_intensity = None  # Light intensity at the robot's current position
         self.button_sensor = False  # State of the button sensor (collision detection)
 
-    def update(self, robot, map):
+    def update(self, robot, map, robots):
         """
         Updates sensor readings for the robot, including light intensity and collision detection.
 
@@ -18,9 +18,9 @@ class SensorNodes:
             map (object): The map object containing light and obstacle data.
         """
         # Update light intensity based on the robot's position on the map
-        self.light_intensity = map.light_map[robot.position[0], robot.position[1]]
+        self.light_intensity = map.light_map[int(robot.position[0]), int(robot.position[1])]
         # Check for collisions with obstacles
-        for obs in self.obstacles:
+        for obs in map.obstacles:
             if obs[0] == "rectangle":
                 # Check if the robot is within the rectangle
                 _, rect_x, rect_y, rect_w, rect_h = obs
@@ -45,7 +45,7 @@ class SensorNodes:
                     break
 
         # Check for collisions with other robots within the robot's field of view (within -90° to 90° of the robot's orientation)
-        for other_robot in map.robots:
+        for other_robot in robots:
             if other_robot.id != robot.id:  # Ignore self-collision check
                 # Calculate the vector from the robot to the other robot
                 distance_x = other_robot.position[0] - robot.position[0]

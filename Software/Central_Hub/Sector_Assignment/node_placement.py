@@ -1,7 +1,7 @@
 import numpy as np
 from shapely.geometry import Point, Polygon, box
 
-from Devices.robot import Robot
+from Sensor_Nodes.robot import Robot
 from Devices.anchor import Anchor
 from Devices.hub import Hub
 
@@ -21,9 +21,9 @@ class NodePlacement:
         self.map_width = map_width
         self.map_height = map_height
 
-    def update(self, sectors):
+    def update(self, sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum):
         # Place robots in sectors
-        robots = self.place_robots(sectors)
+        robots = self.place_robots(sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum)
 
         # Place anchors at the vertices of the map
         anchors = self.place_anchors()
@@ -57,7 +57,7 @@ class NodePlacement:
                     return False
         return True
 
-    def place_robots(self, sectors):
+    def place_robots(self, sectors, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum):
         """
         Place nodes randomly within the bounds of each sector, avoiding obstacles,
         and instantiate them as Robot objects.
@@ -92,7 +92,14 @@ class NodePlacement:
                         position=(x, y),
                         sector=sector,
                         orientation=(0, 0),  # Default orientation
-                        power_level=np.random.uniform(50, 100)  # Random initial power level
+                        power_level=np.random.uniform(50, 100),  # Random initial power level
+                        threshold=threshold,
+                        duty_cycle=duty_cycle,
+                        efficacy=efficacy,
+                        motor_power_consum=motor_power_consum,
+                        velocity=velocity,
+                        ble_power_consum=ble_power_consum,
+                        uwb_power_consum=uwb_power_consum
                     )
                     self.robots.append(robot)
                     robot_id += 1

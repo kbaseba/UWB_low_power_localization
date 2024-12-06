@@ -21,4 +21,12 @@ def simulation_configuration_setup():
 
     random_seed = config["random_seed"]
 
-    return map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed
+    threshold = (config["min_power_threshold"], config["max_power_threshold"])
+    duty_cycle = config["duty_cycle"]
+    efficacy = config["efficacy"]
+    motor_power_consum = config["motor_power_consum"]
+    velocity = config["velocity"]
+    ble_power_consum = config["ble_power_consum"]
+    uwb_power_consum = config["uwb_power_consum"]
+
+    return map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum
