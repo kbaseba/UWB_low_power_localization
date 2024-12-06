@@ -16,6 +16,14 @@
     "motor_power_consum": 0.5,
     "velocity": 1,
     "ble_power_consum": 0.5,
-    "uwb_power_consum": 0.5
+    "uwb_power_consum": 0.5,
+
+    "dt": 0.1,
+    "H":[
+        [1, 0, 0, 0],
+        [0, 1, 0, 0]
+    ],
+    "Q": 0.1,
+    "R": 0.1
 
 }
