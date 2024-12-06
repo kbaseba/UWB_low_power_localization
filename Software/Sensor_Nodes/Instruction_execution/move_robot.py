@@ -12,9 +12,9 @@ class MoveRobot:
         """
         self.motor_power_consum = motor_power_consum
         self.velocity = velocity
-        self.state = False  # Indicates whether the robot can move.
+        self.state = True  # Indicates whether the robot can move.
 
-    def update(self, robot):
+    def update(self, robot, map, robots):
         """
         Updates the robot's position and power level.
 
@@ -29,7 +29,7 @@ class MoveRobot:
         robot.power_level -= self.motor_power_consum
         # Move forward if no collision is found
         if self.state:
-            if robot.senser_nodes.button_sensor:
+            if robot.sensors.button_sensor:
                 # Reverse movement
                 robot.position = (
                     robot.position[0] - self.velocity * robot.orientation[0],
@@ -43,6 +43,6 @@ class MoveRobot:
                     robot.position[1] + self.velocity * robot.orientation[1],
                 )
         # Update sensor readings after movement
-            robot.sensors.update()
+            robot.sensors.update(robot, map, robots)
         
 

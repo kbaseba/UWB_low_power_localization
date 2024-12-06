@@ -20,7 +20,7 @@ class CentralHub:
         # self.mapping = Mapping()
         # self.swarm_coordination = SwarmCoordination()
         
-    def update(self):
+    def update(self, frame=None):
         self.leader_nodes = self.leader_selection.update(self.hub.robots)
 
         for robot in self.hub.robots:
@@ -33,6 +33,7 @@ class CentralHub:
         self.estimator.update()
         # self.mapping.update(self.hub.robots)
         # self.swarm_coordination.update(self.hub.robots)
+
 
 
         
@@ -58,6 +59,7 @@ class CentralHub:
 
         # Extract robot positions
         sensor_node_positions = [robot.position for robot in self.hub.robots]
+        print(sensor_node_positions)
 
         # Extract anchor positions
         anchor_position = [anchor.position for anchor in self.hub.anchors]
@@ -79,6 +81,7 @@ class CentralHub:
             else:
                 print(f"Sector: {sector}, No leader assigned")
 
-        self.map.plot_map(sectors=self.sectors, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
+        
+        self.map.update(sectors=self.sectors, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
 
 
