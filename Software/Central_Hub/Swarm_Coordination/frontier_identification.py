@@ -2,7 +2,7 @@
 import numpy as np
 
 class FrontierIdentification:
-    def _init_(self, map_height, map_width, matrix_height = 100, matrix_width = 100, alpha = 1, beta = 1, Imax = 1, Lmax = 1, hub = None, robot = None):
+    def __init__(self, map_height, map_width, matrix_height = 100, matrix_width = 100, alpha = 1, beta = 1, Imax = 1, Lmax = 1, hub = None, robot = None):
         self.map_height = map_height
         self.map_width = map_width
         self.matrix_height = matrix_height

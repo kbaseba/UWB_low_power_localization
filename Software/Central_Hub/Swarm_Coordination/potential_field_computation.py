@@ -4,7 +4,7 @@ import numpy as np
 from .frontier_identification import FrontierIdentification
 
 class PotentialFieldComputation:
-    def _init_(self, map, c=10, delta=0.001, phi_num=1, hub = None, robot = None):
+    def __init__(self, map, c=10, delta=0.001, phi_num=1, hub = None, robot = None):
         self.FrontierIdentification = FrontierIdentification(map_height=map.height, map_width=map.width, hub = hub, robot = robot)
         self.FrontierIdentification.update()
         self.optimal_frontier = self.FrontierIdentification.optimal_frontier
