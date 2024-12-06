@@ -2,10 +2,10 @@
     "map_width": 200,
     "map_height": 200,
     "num_obstacles": 20,
-    "light_variation": false,
+    "light_variation": true,
 
     "num_sectors": 16,
-    "total_num_sensor_nodes": 40,
+    "total_num_sensor_nodes": 100,
     "node_range": 10,
     "random_seed": 42,
 
@@ -14,16 +14,16 @@
     "duty_cycle": 2,
     "efficacy": 10.0,
     "motor_power_consum": 1.0,
-    "velocity": 0.1,
+    "velocity": 0.0001,
     "ble_power_consum": 0.1,
-    "uwb_power_consum": 30.0,
+    "uwb_power_consum": 15.0,
 
     "dt": 1.0,
     "H":[
         [1, 0, 0, 0],
         [0, 1, 0, 0]
     ],
-    "Q": 1.0e-1,
-    "R": 1.0e-5
+    "Q": 1.0e-0,
+    "R": 1.0e-3
 
 }

@@ -42,7 +42,7 @@ class CentralHub:
                 self.hub.robots[i].just_localized = False
                 x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.robots[i].position).reshape(2, 1))
             else:
-                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=None)
+                x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=np.array(self.hub.robots[i].position).reshape(2, 1))
             self.hub.robots[i].estimate_history.append(x̂)
 
         self.mapping.update()
@@ -64,14 +64,14 @@ class CentralHub:
         hub_position = self.hub.position
 
         # Step 5: Print leader nodes with their IDs and power levels
-        print("Leader Nodes:")
-        for sector, leader_id in self.leader_nodes.items():
-            if leader_id is not None:
-                # Find the corresponding robot object
-                leader_robot = next(robot for robot in self.hub.robots if robot.id == leader_id)
-                print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
-            else:
-                print(f"Sector: {sector}, No leader assigned")
+        # print("Leader Nodes:")
+        # for sector, leader_id in self.leader_nodes.items():
+        #     if leader_id is not None:
+        #         # Find the corresponding robot object
+        #         leader_robot = next(robot for robot in self.hub.robots if robot.id == leader_id)
+        #         print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
+        #     else:
+        #         print(f"Sector: {sector}, No leader assigned")
 
         
         self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)

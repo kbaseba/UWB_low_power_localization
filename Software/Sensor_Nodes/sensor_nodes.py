@@ -52,38 +52,38 @@ class SensorNodes:
                     return
 
         # Check for collisions with other robots within the robot's field of view (within -90° to 90° of the robot's orientation)
-        for other_robot in robots:
-            if other_robot.id != robot.id:  # Ignore self-collision check
-                # Calculate the vector from the robot to the other robot
-                distance_x = other_robot.position[0] - robot.position[0]
-                distance_y = other_robot.position[1] - robot.position[1]
+        # for other_robot in robots:
+        #     if other_robot.id != robot.id:  # Ignore self-collision check
+        #         # Calculate the vector from the robot to the other robot
+        #         distance_x = other_robot.position[0] - robot.position[0]
+        #         distance_y = other_robot.position[1] - robot.position[1]
 
-                # Calculate the distance between the robots
-                distance = math.sqrt(distance_x**2 + distance_y**2)
+        #         # Calculate the distance between the robots
+        #         distance = math.sqrt(distance_x**2 + distance_y**2)
 
-                if distance < 1:  # Adjust collision distance threshold as needed
-                    # Normalize the vector (distance_x, distance_y) to get the direction
-                    print(f"distance: {distance}")
+        #         if distance < 5:  # Adjust collision distance threshold as needed
+        #             # Normalize the vector (distance_x, distance_y) to get the direction
+        #             # print(f"distance: {distance}")
 
-                    direction_vector = (distance_x / distance, distance_y / distance)
+        #             direction_vector = (distance_x / distance, distance_y / distance)
 
-                    # Get the robot's orientation as a unit vector
-                    orientation_vector = (
-                        math.cos(math.atan2( math.sin((robot.orientation/360)*2*math.pi), math.cos((robot.orientation/360)*2*math.pi))),
-                        math.sin(math.atan2( math.sin((robot.orientation/360)*2*math.pi), math.cos((robot.orientation/360)*2*math.pi))),
-                    )
+        #             # Get the robot's orientation as a unit vector
+        #             orientation_vector = (
+        #                 math.cos(math.atan2( math.sin((robot.orientation/360)*2*math.pi), math.cos((robot.orientation/360)*2*math.pi))),
+        #                 math.sin(math.atan2( math.sin((robot.orientation/360)*2*math.pi), math.cos((robot.orientation/360)*2*math.pi))),
+        #             )
 
-                    # Calculate the dot product to find the angle between vectors
-                    dot_product = (
-                        direction_vector[0] * orientation_vector[0]
-                        + direction_vector[1] * orientation_vector[1]
-                    )
+        #             # Calculate the dot product to find the angle between vectors
+        #             dot_product = (
+        #                 direction_vector[0] * orientation_vector[0]
+        #                 + direction_vector[1] * orientation_vector[1]
+        #             )
 
-                    # Use the dot product to check if the angle is within -90° to 90°
-                    angle = math.degrees(math.acos(dot_product))
-                    if -90 <= angle <= 90:
-                        self.button_sensor = True
-                        return  # Exit loop after detecting collision
+        #             # Use the dot product to check if the angle is within -90° to 90°
+        #             angle = math.degrees(math.acos(dot_product))
+        #             if -90 <= angle <= 90:
+        #                 self.button_sensor = True
+        #                 return  # Exit loop after detecting collision
             
         # If no collision is detected, reset the button sensor to False
         self.button_sensor = False

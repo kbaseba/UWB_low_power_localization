@@ -190,17 +190,18 @@ class Map:
         if hub_position:
             self.ax1.plot(hub_position[0], hub_position[1], 'go', markersize=18)
 
-        # Plot robot path as a line
+        # if len(robot.esimate_history) > 20:
         for robot in robots:
-            # Extract x and y coordinates for the trajectory
-            x_history = [state[0, 0] for state in robot.estimate_history]  # x-coordinates over time
-            y_history = [state[1, 0] for state in robot.estimate_history]  # y-coordinates over time
+            # Extract x and y coordinates for the trajectory, ignoring the first 20 estimates
+            x_history = [state[0, 0] for state in robot.estimate_history[10:]]  # x-coordinates from 21st onwards
+            y_history = [state[1, 0] for state in robot.estimate_history[10:]]  # y-coordinates from 21st onwards
 
-            # Plot the trajectory as a connected line
-            self.ax1.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
-        
+            # Plot the path
+            plt.plot(x_history, y_history, color='black', label=f'Robot {robot.id}')  # Add a label if robots have IDs
+
         for x,y in hub.collisions:
             self.ax1.plot(x, y, 'o', markersize=2, color='red')
+            self.ax2.plot(x, y, 'o', markersize=2, color='red')
 
         for sequence in hub.localizations:
             for x,y in sequence:
@@ -215,45 +216,3 @@ class Map:
         self.ax2.set_xlim(0, self.width)
         self.ax2.set_ylim(0, self.height)
         self.ax2.set_title("Mapping")
-
-
-
-if __name__ == "__main__":
-    # Load configuration from JSON file
-    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed = simulation_configuration_setup()
-
-    # Set random seed for reproducibility
-    np.random.seed(random_seed)
-
-    # Step 1: Create the map
-    map_instance = Map(width=map_width, height=map_height, num_obstacles=num_obstacles, light_variation=light_variation)
-
-    # Step 2: Perform sector assignment and node placement
-    sector_assignment = SectorAssignment(map_width, map_height, num_sectors, total_num_sensor_nodes, node_range, map_instance.obstacles)
-    sectors, hub = sector_assignment.update()
-
-    # Extract robot positions
-    sensor_node_positions = [robot.position for robot in hub.robots]
-
-    # Extract anchor positions
-    anchor_position = [anchor.position for anchor in hub.anchors]
-
-    # Extract hub position
-    hub_position = hub.position
-
-    # Step 3: Leader selection
-    leader_selection = LeaderSelection()
-    leader_nodes = leader_selection.update(hub.robots)
-
-    # Step 5: Print leader nodes with their IDs and power levels
-    print("Leader Nodes:")
-    for sector, leader_id in leader_nodes.items():
-        if leader_id is not None:
-            # Find the corresponding robot object
-            leader_robot = next(robot for robot in hub.robots if robot.id == leader_id)
-            print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
-        else:
-            print(f"Sector: {sector}, No leader assigned")
-
-    map_instance.plot_map(sectors=sectors, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
-
