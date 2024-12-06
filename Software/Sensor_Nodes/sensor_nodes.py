@@ -31,14 +31,14 @@ class SensorNodes:
             if obs[0] == "rectangle":
                 # Check if the robot collides with the rectangle
                 _, rect_x, rect_y, rect_w, rect_h = obs
-                if rect_x <= robot.position[0]+robot.orientation[0] <= rect_x + rect_w and rect_y <= robot.position[1]+robot.orientation[1] <= rect_y + rect_h:
+                if rect_x <= robot.position[0]+math.cos(robot.orientation) <= rect_x + rect_w and rect_y <= robot.position[1]+ math.sin(robot.orientation) <= rect_y + rect_h:
                     self.button_sensor = True
                     return
 
             elif obs[0] == "circle":
                 # Check if the robot collides with the circle
                 _, cx, cy, r = obs
-                distance = np.sqrt((robot.position[0]+robot.orientation[0] - cx)**2 + (robot.position[1]+robot.orientation[1] - cy)**2)
+                distance = np.sqrt((robot.position[0]+math.cos(robot.orientation) - cx)**2 + (robot.position[1]+ math.sin(robot.orientation) - cy)**2)
                 if distance <= r:
                     self.button_sensor = True
                     return
@@ -47,7 +47,7 @@ class SensorNodes:
                 # Check if the robot collides with the polygon
                 _, points = obs
                 polygon = Polygon(points)
-                if polygon.contains(Point(robot.position[0]+robot.orientation[0], robot.position[1]+robot.orientation[1])):
+                if polygon.contains(Point(robot.position[0]+math.cos(robot.orientation), robot.position[1]+ math.sin(robot.orientation))):
                     self.button_sensor = True
                     return
 
@@ -67,8 +67,8 @@ class SensorNodes:
 
                     # Get the robot's orientation as a unit vector
                     orientation_vector = (
-                        math.cos(math.atan2(robot.orientation[1], robot.orientation[0])),
-                        math.sin(math.atan2(robot.orientation[1], robot.orientation[0])),
+                        math.cos(math.atan2( math.sin(robot.orientation), math.cos(robot.orientation))),
+                        math.sin(math.atan2( math.sin(robot.orientation), math.cos(robot.orientation))),
                     )
 
                     # Calculate the dot product to find the angle between vectors
