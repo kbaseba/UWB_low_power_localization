@@ -34,6 +34,11 @@ class FrontierIdentification:
         i_matrix = (self.matrix_height - 1) - round((y_map/self.map_height)*(self.matrix_height - 1))
         return [i_matrix,j_matrix]
 
+    def conv_matrix_to_map(i_matrix,j_matrix):
+        x_map = (j_matrix/(self.matrix_width - 1))*self.map_width
+        y_map = (1-(i_matrix/(self.matrix_height - 1)))*self.map_height
+        return [x_map,y_map]
+
     def update_map_matrix(self):
         for robot in self.Hub.robots:
             for point in robot.estimate_history:
