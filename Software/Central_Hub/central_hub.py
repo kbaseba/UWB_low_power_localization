@@ -90,6 +90,6 @@ class CentralHub:
         #         print(f"Sector: {sector}, No leader assigned")
 
         
-        self.map.update(sectors=self.sectors, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
+        self.map.update(sectors=self.sectors, robots=self.hub.robots, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
 
 
