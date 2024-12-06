@@ -197,10 +197,14 @@ class Map:
             y_history = [state[1, 0] for state in robot.estimate_history]  # y-coordinates over time
 
             # Plot the trajectory as a connected line
-            self.ax2.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
+            self.ax1.plot(x_history, y_history, linestyle='--', color='blue', label=f"Robot {robot.id}")
         
         for x,y in hub.collisions:
-            self.ax2.plot(x, y, 'o', markersize=2, color='red')
+            self.ax1.plot(x, y, 'o', markersize=2, color='red')
+
+        for sequence in hub.localizations:
+            for x,y in sequence:
+                self.ax1.plot(x, y, 'o', markersize=2, color='green')
 
 
         # Set self.axis limits and title

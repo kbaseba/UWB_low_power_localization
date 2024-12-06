@@ -5,18 +5,18 @@
     "light_variation": false,
 
     "num_sectors": 16,
-    "total_num_sensor_nodes": 50,
+    "total_num_sensor_nodes": 20,
     "node_range": 10,
     "random_seed": 42,
 
     "min_power_threshold": 10,
-    "max_power_threshold": 50,
+    "max_power_threshold": 20,
     "duty_cycle": 2,
-    "efficacy": 0.5,
-    "motor_power_consum": 0.5,
+    "efficacy": 10.0,
+    "motor_power_consum": 1.0,
     "velocity": 0.1,
-    "ble_power_consum": 0.5,
-    "uwb_power_consum": 0.5,
+    "ble_power_consum": 0.1,
+    "uwb_power_consum": 40.0,
 
     "dt": 1.0,
     "H":[

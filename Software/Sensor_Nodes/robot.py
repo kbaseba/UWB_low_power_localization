@@ -51,7 +51,7 @@ class Robot:
         self.data_transmitter = TransmitData(ble_power_consum, duty_cycle)
         self.uwb_transmitter = UWBLocalization(uwb_power_consum)
 
-        self.system_simulator = SystemSimulator(dt, Q, R, np.array([[self.position[0]], [self.position[1]], [self.orientation], [self.velocity]]), True)
+        self.system_simulator = SystemSimulator(dt, Q, R, np.array([[self.position[0]], [self.position[1]], [self.orientation], [0.0]]), True)
         
         self.executor = InstructionExecution(self.system_simulator, MoveRobot(motor_power_consum, velocity))
 

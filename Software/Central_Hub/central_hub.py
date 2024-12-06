@@ -17,7 +17,7 @@ class CentralHub:
         self.leader_selection = LeaderSelection()
         self.sectors, self.hub = self.sector_assignment.update()
 
-        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [robot.velocity]])) for robot in self.hub.robots]
+        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [0.0]])) for robot in self.hub.robots]
         self.mapping = Mapping(self.hub)
         # self.swarm_coordination = SwarmCoordination()
         
@@ -31,6 +31,7 @@ class CentralHub:
             robot.update(self.map, self.hub.robots)
 
         self.hub.receiveData()
+        self.hub.UWBLocalization()
         
         for i, estimator in enumerate(self.estimators):
             if self.hub.robots[i].just_localized == True:
