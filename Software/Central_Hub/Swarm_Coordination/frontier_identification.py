@@ -1,9 +1,7 @@
-# Imports
 import numpy as np
 from Devices.hub import Hub
 from Sensor_Nodes.robot import Robot
 
-# Class comment
 class FrontierIdentification:
     def __init__(self, map_height, map_width, matrix_height = 100, matrix_width = 100, alpha = 1, beta = 1, Imax = 1, Lmax = 1, Hub, Robot):
         self.map_height = map_height
@@ -19,7 +17,7 @@ class FrontierIdentification:
         self.alpha = alpha
         self.beta = beta
         self.Imax = 8
-        self.Lmax = np.sqrt(self.map_height**2 + self.map_width**2)
+        self.Lmax = np.sqrt(self.matrix_height**2 + self.matrix_width**2)
         self.Hub = Hub
         self.Robot = Robot
     
@@ -70,13 +68,14 @@ class FrontierIdentification:
         self.information_gain = [0 for _ in range(len(self.frontier_set))]
         for i in range(len(self.frontier_set)):
             frontier_point = self.frontier_set[i]
-            [i_frontier,j_frontier] = self.conv_map_to_matrix(frontier_point[0],frontier_point[1])
+            i_frontier = frontier_point[0]
+            j_frontier = frontier_point[1]
             neighbour_count = 0
             for p in [-1,0,1]:
                 for q in [-1,0,1]:
                     if(p==0 and q==0):
                         continue
-                    if((i_frontier+p >= 0) and (i_frontier+p <= m-1) and (j_frontier+q >= 0) and (j_frontier+q <= n-1)):
+                    if((i_frontier+p >= 0) and (i_frontier+p <= self.matrix_height-1) and (j_frontier+q >= 0) and (j_frontier+q <= self.matrix_width-1)):
                         if(M[i_frontier+p,j_frontier+q] == 0):
                             neighbour_count += 1
             
@@ -87,7 +86,7 @@ class FrontierIdentification:
         for i in range(len(self.frontier_set)):
             frontier_point = self.frontier_set[i]
             robot_location = self.Hub.robots[self.Robot.id].estimate_history[-1]
-            #[i_frontier,j_frontier] = self.conv_map_to_matrix(frontier_point[0],frontier_point[1])
+            robot_location = self.conv_map_to_matrix(robot_location[0],robot_location[1])
             self.path_length[i] = np.sqrt((robot_location[0]-frontier_point[0])**2 + (robot_location[1]-frontier_point[1])**2)
     
     def find_cost_function(self):
