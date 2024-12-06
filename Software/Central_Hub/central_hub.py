@@ -80,14 +80,14 @@ class CentralHub:
         leader_nodes = leader_selection.update(self.hub.robots)
 
         # Step 5: Print leader nodes with their IDs and power levels
-        print("Leader Nodes:")
-        for sector, leader_id in leader_nodes.items():
-            if leader_id is not None:
-                # Find the corresponding robot object
-                leader_robot = next(robot for robot in self.hub.robots if robot.id == leader_id)
-                # print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
-            else:
-                print(f"Sector: {sector}, No leader assigned")
+        # print("Leader Nodes:")
+        # for sector, leader_id in leader_nodes.items():
+        #     if leader_id is not None:
+        #         # Find the corresponding robot object
+        #         leader_robot = next(robot for robot in self.hub.robots if robot.id == leader_id)
+        #         # print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
+        #     else:
+        #         print(f"Sector: {sector}, No leader assigned")
 
         
         self.map.update(sectors=self.sectors, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)

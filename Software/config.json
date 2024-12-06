@@ -11,10 +11,10 @@
 
     "min_power_threshold": 10,
     "max_power_threshold": 50,
-    "duty_cycle": 5,
+    "duty_cycle": 2,
     "efficacy": 0.5,
     "motor_power_consum": 0.5,
-    "velocity": 1,
+    "velocity": 5,
     "ble_power_consum": 0.5,
     "uwb_power_consum": 0.5,
 
