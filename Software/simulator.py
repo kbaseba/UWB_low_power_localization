@@ -19,6 +19,7 @@ class Simulator:
     def update(self, frames=100, interval=200):
         """Create an animation of the map."""
         animation = FuncAnimation(self.map.fig, self.central_hub.update, frames=frames, interval=interval)
+        animation.save("animation.mp4",fps=30,dpi=300,writer="ffmpeg")
         plt.show()
 
 if __name__ == "__main__":
