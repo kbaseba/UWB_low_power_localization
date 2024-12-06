@@ -4,7 +4,9 @@ from testbesnch_tools import simulation_configuration_setup
 
 from map_creation import Map
 from Central_Hub.central_hub import CentralHub
-from Sensor_Nodes.sensor_nodes import SensorNodes
+
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 # Class comment
 class Simulator:
@@ -13,11 +15,11 @@ class Simulator:
         self.map = Map(width=map_width, height=map_height, num_obstacles=num_obstacles, light_variation=light_variation)
         self.central_hub = CentralHub(self.map, num_sectors, total_num_sensor_nodes, node_range, 
                                       threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum)
-        # self.sensor_nodes = SensorNodes()
 
-    def update(self):
-        # while True:
-            self.central_hub.update()
+    def update(self, frames=100, interval=200):
+        """Create an animation of the map."""
+        animation = FuncAnimation(self.map.fig, self.central_hub.update, frames=frames, interval=interval)
+        plt.show()
 
 if __name__ == "__main__":
     # Load configuration from JSON file

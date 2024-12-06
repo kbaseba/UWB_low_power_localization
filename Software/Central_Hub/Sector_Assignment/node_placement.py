@@ -91,7 +91,7 @@ class NodePlacement:
                         id=robot_id,
                         position=(x, y),
                         sector=sector,
-                        orientation=(0, 0),  # Default orientation
+                        orientation=(0.6, 0.8),  # Default orientation
                         power_level=np.random.uniform(50, 100),  # Random initial power level
                         threshold=threshold,
                         duty_cycle=duty_cycle,
