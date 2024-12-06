@@ -2,8 +2,7 @@
 
 from .Sector_Assignment.sector_assignment import SectorAssignment
 from .Leader_Selection.leader_selection import LeaderSelection
-from .data_reception import DataReception
-# from .Estimator.estimator import Estimator
+from .estimator import Estimator
 from .mapping import Mapping
 from .Swarm_Coordination.swarm_coordination import SwarmCoordination
 
@@ -17,8 +16,7 @@ class CentralHub:
         self.leader_selection = LeaderSelection()
         self.sectors, self.hub = self.sector_assignment.update()
 
-        # self.data_reception = DataReception()
-        # self.estimator = Estimator()
+        self.estimator = Estimator()
         # self.mapping = Mapping()
         # self.swarm_coordination = SwarmCoordination()
         
@@ -31,8 +29,8 @@ class CentralHub:
         for robot in self.hub.robots:
             robot.update(self.map, self.hub.robots)
 
-        # self.data_reception.update(self.hub.robots)
-        # self.estimator.update(self.hub.robots)
+        self.hub.receiveData()
+        self.estimator.update()
         # self.mapping.update(self.hub.robots)
         # self.swarm_coordination.update(self.hub.robots)
 
