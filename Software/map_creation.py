@@ -150,7 +150,7 @@ class Map:
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
     
-    def update(self, sectors, sensor_node_positions, anchor_positions, hub_position):
+    def update(self, robots, sectors, sensor_node_positions, anchor_positions, hub_position):
         # Clear the axis and redraw
         self.ax1.clear()
         self.ax2.clear()
@@ -189,6 +189,10 @@ class Map:
 
         if hub_position:
             self.ax1.plot(hub_position[0], hub_position[1], 'go', markersize=18)
+
+        # Plot robot path as a line
+        for robot in robots:
+            self.ax2.plot(*zip(robot.estimate_history), 'b--')
 
         # Set self.axis limits and title
         self.ax1.set_xlim(0, self.width)
