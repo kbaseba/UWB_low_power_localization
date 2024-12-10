@@ -85,8 +85,4 @@ class SensorNodes:
         #             if -90 <= angle <= 90:
         #                 self.button_sensor = True
         #                 return  # Exit loop after detecting collision
-        
-        if self.button_sensor:
-            robot.executor.motor.state=False
-        else:
-            robot.executor.motor.state=True
+    
