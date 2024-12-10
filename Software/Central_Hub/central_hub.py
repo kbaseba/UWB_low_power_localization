@@ -40,6 +40,7 @@ class CentralHub:
             robot.update(self.map, self.hub.robots)
 
         self.hub.receiveData()
+        self.mapping.uwb_update()
         self.hub.update()
         
         for i, estimator in enumerate(self.estimators):
@@ -52,7 +53,7 @@ class CentralHub:
             
             self.hub.robots[i].estimate_history.append(x̂)
 
-        self.mapping.update()
+        self.mapping.low_power_update()
         self.swarm_coordination.update(self.map)
 
 

@@ -69,7 +69,5 @@ class Hub:
 
 
     def update(self):
-        #Receive incoming data from robots
-
         #Update the three anchors, localizing leader robot
         self.UWBLocalization()
