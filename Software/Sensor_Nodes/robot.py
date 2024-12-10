@@ -44,6 +44,8 @@ class Robot:
         self.just_localized = False
         self.estimate_history = []
         self.velocity = velocity
+        self.time_spent_active = 0
+        self.time_spent_low_power = 0
 
         # Components responsible for specific robot tasks
         self.sensors = SensorNodes()
@@ -76,6 +78,7 @@ class Robot:
         # Check if the robot enters lower power mode from active
         if self.mode == "active" and self.power_level < self.power_threshold[0]:
             self.mode = "low power"
+            self.time_spent_low_power += 1
             # Inform the central hub of entering low power mode
             self.data_transmitter.state = True
             self.power_level -= self.data_transmitter.power_consum
@@ -88,6 +91,7 @@ class Robot:
             }
         elif self.mode == "low power" and self.power_level > self.power_threshold[1]:
             self.mode = "active"
+            self.time_spent_active += 1
             # Inform the central hub of exiting low power mode
             self.data_transmitter.state = True
             self.power_level -= self.data_transmitter.power_consum
