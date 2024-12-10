@@ -16,9 +16,10 @@ class Simulator:
         self.central_hub = CentralHub(self.map, num_sectors, total_num_sensor_nodes, node_range, 
                                       threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
 
-    def update(self, frames=100, interval=200):
+    def update(self):
         """Create an animation of the map."""
-        animation = FuncAnimation(self.map.fig, self.central_hub.update, frames=frames, interval=interval)
+        #animation = FuncAnimation(self.map.fig, self.central_hub.update, frames=frames, interval=interval)
+        self.central_hub.update()
         #animation.save("animation.mp4",fps=30,dpi=300,writer="ffmpeg")
         plt.show()
 
