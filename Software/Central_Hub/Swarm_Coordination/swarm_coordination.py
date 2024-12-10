@@ -5,8 +5,7 @@ class SwarmCoordination:
         self.hub = hub
 
     def update(self, map):
-        for data in self.hub.robotData:
-            if data["button_sensor_state"]:
+        for robot in self.hub.robots:
+            if not robot.excutor.motor.state:
                 PotentialFieldComputation(map=map, hub=self.hub, robot=self.hub.robots[data["id"]]).update()
-                self.hub.robots[data["id"]].executor.motor.state = True
-                data["button_sensor_state"] = False
+                robot.executor.motor.state = True

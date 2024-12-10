@@ -43,7 +43,7 @@ class MoveRobot:
                     max(0, min(map.light_map.shape[0] - 1, z[0][0])),
                     max(0, min(map.light_map.shape[1] - 1, z[1][0]))
                 )   
-                # self.state = False
+                self.state = False
             else:
                 # Forward movement
                 # robot.position = (
