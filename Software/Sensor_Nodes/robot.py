@@ -69,10 +69,10 @@ class Robot:
         transmitting data, and handling UWB localization signals.
         """
         self.power_harvester.update(self)  # Harvest power based on light intensity
-        if self.mode == "active":
-            self.sensors.update(self, map, robots)  # Refresh sensor readings
-            self.data_transmitter.update(self)  # Handle data transmission
-            self.uwb_transmitter.update(self)  # Activate or deactivate UWB localization
+        #if self.mode == "active":
+        self.sensors.update(self, map, robots)  # Refresh sensor readings
+        self.data_transmitter.update(self)  # Handle data transmission
+        self.uwb_transmitter.update(self)  # Activate or deactivate UWB localization
         # Check if the robot enters lower power mode from active
         if self.mode == "active" and self.power_level < self.power_threshold[0]:
             self.mode = "low power"
