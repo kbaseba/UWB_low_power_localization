@@ -264,7 +264,9 @@ class Map:
         self.ax3.set_xlim(0, self.width)
         self.ax3.set_ylim(0, self.height)
         # Calculate map discovery percentage
-        map_discovery = np.count_nonzero(frontier.map_matrix) / (self.width * self.height) * 100
+        shape = np.shape(frontier.map_matrix)
+        #print(f"Shape: {shape}")
+        map_discovery = np.count_nonzero(frontier.map_matrix) / (shape[0] * shape[1]) * 100
 
         # Set the title with the formatted percentage
         self.ax4.set_title(f"Map Coverage Percentage: {map_discovery:.2f}%")
