@@ -3,6 +3,7 @@ from tkinter import messagebox
 import json
 import os
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 from simulator import Simulator
@@ -38,14 +39,6 @@ def update_config(entries, config_path):
 
 # Function to start the simulation
 def start_simulation(entries, config_path):
-    # #Setting position to the left
-    # manager = plt.get_current_fig_manager()
-    # try:
-    #     manager.window.wm_geometry("+1000+100")  # Adjust X (horizontal) and Y (vertical) offsets
-    # except AttributeError:
-    #     # For other backends like 'QtAgg', you may need to use a different method
-    #     if hasattr(manager, "window"):
-    #         manager.window.setGeometry(1000, 100, 800, 600)  # x, y, width, height
 
     update_config(entries, config_path)
     map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R = simulation_configuration_setup()
@@ -68,7 +61,7 @@ def create_gui(config_path):
 
     # Input fields
     entries = {}
-    non_shows = ["map_width", "map_height","node_range", "velocity", "dt", "H"]
+    non_shows = ["map_width", "map_height", "node_range", "velocity", "dt", "H"]
     for idx, (key, value) in enumerate(config.items()):
         if key not in non_shows:
             if "_" in key:
@@ -97,7 +90,7 @@ def create_gui(config_path):
     root.mainloop()
 
 # Entry point
-if __name__ == "_main_":
+if __name__ == "__main__":
     CONFIG_FILE = "config.json"
     config_path = os.path.join(os.path.dirname(__file__), CONFIG_FILE)
     create_gui(config_path)

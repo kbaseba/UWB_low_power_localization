@@ -6,6 +6,7 @@ from map_creation import Map
 from Central_Hub.central_hub import CentralHub
 
 import matplotlib.pyplot as plt
+import matplotlib
 from matplotlib.animation import FuncAnimation
 
 # Class comment
@@ -16,11 +17,20 @@ class Simulator:
         self.central_hub = CentralHub(self.map, num_sectors, total_num_sensor_nodes, node_range, 
                                       threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
 
-    def update(self, frames=500, interval=200):
+    def update(self, frames=200, interval=200):
         """Create an animation of the map."""
         animation = FuncAnimation(self.map.fig, self.central_hub.update, frames=frames, interval=interval)
-        animation.save("animation.mp4",fps=30,dpi=300,writer="ffmpeg")
-        # plt.show()
+        # animation.save("animation.mp4",fps=30,dpi=300,writer="ffmpeg")
+        #Setting position to the left
+        #matplotlib.use("TkAgg")
+        manager = plt.get_current_fig_manager()
+        try:
+            manager.window.wm_geometry("+1000+1000")  # Adjust X (horizontal) and Y (vertical) offsets
+        except AttributeError:
+            # For other backends like 'QtAgg', you may need to use a different method
+            if hasattr(manager, "window"):
+                manager.window.setGeometry(1000, 100, 800, 600)  # x, y, width, height
+        plt.show()
 
 if __name__ == "__main__":
     # Load configuration from JSON file
