@@ -1,47 +1,28 @@
 # Imports
 
-# Class comment
 class PowerAssessment:
     def __init__(self):
-        self.current_leaders = {}  # Tracks the current leader for each sector
+        pass
 
-    def update(self, robots):
-         # Group robots by sector boundaries
+    def update(self, hub):
         sector_robots = {}
-        for robot in robots:
+        for robot in hub.robots:
             if robot.sector not in sector_robots:
                 sector_robots[robot.sector] = []
             sector_robots[robot.sector].append(robot)
 
-        # Update leaders for each sector
-        self.current_leaders = {}
         for sector_coords, robots_in_sector in sector_robots.items():
-            # Check if there is already a leader in the sector
-            has_leader = any(robot.role == "leader" for robot in robots_in_sector)
-            if has_leader:
-                # Skip assigning a new leader if a leader already exists
-                continue
-            
-            # Get the upper power threshold from any robot (all are the same)
-            upper_threshold = robots_in_sector[0].power_threshold[1] if robots_in_sector else None
+            existing_leader = next((robot for robot in robots_in_sector if robot.role == "leader"), None)
 
-            # Filter robots above the upper power threshold
+            if existing_leader:
+                continue
+
+            upper_threshold = robots_in_sector[0].power_threshold[1]
             eligible_robots = [
                 robot for robot in robots_in_sector if robot.power_level > upper_threshold
             ]
-
             if eligible_robots:
-                # Select the robot with the highest power as the leader
-                leader = max(eligible_robots, key=lambda r: r.power_level)
-                leader.role = "leader"  # Assign leader role
-                self.current_leaders[sector_coords] = leader.id
-            else:
-                # Clear leader if no eligible robots
-                self.current_leaders[sector_coords] = None
-
-                # Reset role for all robots in this sector
-                for robot in robots_in_sector:
-                    if robot.role == "leader":
-                        robot.role = "non-leader"
-
-        return self.current_leaders
+                # Select the robot with the highest power
+                new_leader = max(eligible_robots, key=lambda r: r.power_level)
+                new_leader_id = int(new_leader.id)
+                hub.robots[new_leader_id].role = "leader"

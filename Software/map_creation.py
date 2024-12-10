@@ -7,6 +7,8 @@ from testbench_tools import simulation_configuration_setup
 from Central_Hub.Sector_Assignment.sector_assignment import SectorAssignment
 from Central_Hub.Leader_Selection.leader_selection import LeaderSelection
 
+from Central_Hub.Swarm_Coordination.frontier_identification import FrontierIdentification
+
 class Map:
     def __init__(self, width=100, height=100, num_obstacles=10, light_variation=True):
         self.width = width
@@ -18,7 +20,9 @@ class Map:
         self.light_map = np.ones((height, width))  # Default light intensity = 1
         if light_variation:
             self.generate_light_intensity()
+        # self.fig, (self.ax1, self.ax2, self.ax3, self.ax4) = plt.subplots(1, 4, figsize=(20, 5))
         self.fig, (self.ax1, self.ax2, self.ax3) = plt.subplots(1, 3, figsize=(15, 5))
+
         
 
     def generate_obstacles(self):
@@ -154,6 +158,7 @@ class Map:
         # Clear the axis and redraw
         self.ax1.clear()
         self.ax2.clear()
+        self.ax3.clear()
         """Visualize the map with optional overlays for sectors and nodes."""
         self.ax1.imshow(self.light_map, cmap='gray', origin='lower')
 
@@ -192,14 +197,12 @@ class Map:
 
         # if len(robot.esimate_history) > 20:
         for robot in robots:
-            # Extract x and y coordinates for the trajectory, ignoring the first 20 estimates
+            # Extract x and y coordinates for the trajectory, ignoring the first 10 estimates
             x_history = [state[0, 0] for state in robot.estimate_history[10:]]  # x-coordinates from 21st onwards
             y_history = [state[1, 0] for state in robot.estimate_history[10:]]  # y-coordinates from 21st onwards
 
             # Plot the path
             self.ax2.plot(x_history, y_history, color='black', label=f'Robot {robot.id}')  # Add a label if robots have IDs
-        
-        self.ax3.clear()
 
         for robot in robots:
             # Determine the marker color based on battery level
@@ -226,9 +229,9 @@ class Map:
             self.ax1.plot(x, y, 'o', markersize=2, color='red')
             self.ax2.plot(x, y, 'o', markersize=2, color='red')
 
-        for sequence in hub.localizations:
-            for x,y in sequence:
-                self.ax1.plot(x, y, 'o', markersize=2, color='green')
+        for position in hub.curr_localizations:
+            
+            self.ax1.plot(position[0], position[1], 'o', markersize=2, color='green')
 
 
         # Set self.axis limits and title
@@ -243,3 +246,10 @@ class Map:
         self.ax3.set_xlim(0, self.width)
         self.ax3.set_ylim(0, self.height)
         self.ax3.set_title("Node Battery Level")
+
+        # frontier = FrontierIdentification(self.height, self.width, hub=hub, robot=robots[0])
+        # frontier.update()
+        # self.ax4.imshow(frontier.map_matrix, cmap='magma', interpolation='nearest')
+        # self.ax3.set_xlim(0, self.width)
+        # self.ax3.set_ylim(0, self.height)
+        # self.ax3.set_title("Node Battery Level")

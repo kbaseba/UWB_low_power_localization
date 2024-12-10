@@ -26,17 +26,8 @@ class UpdateSectors:
         
         :return: Dictionary mapping sector boundaries (tuples) to lists of robots currently in those sectors.
         """
-        # Clear sector assignments by initializing a fresh dictionary
-        sector_robots = {sector: [] for sector in self.sectors}
-
         # Iterate through all robots in the hub
         for robot in self.hub.robots:
+            if robot.role == "non-leader":
             # Determine the sector based on the robot's position
-            robot.sector = self.determine_sector(robot.position)
-            
-            if robot.sector:
-                # Add the robot to the corresponding sector
-                sector_robots[robot.sector].append(robot)
-
-        # Return the updated grouping of robots by sector
-        return sector_robots
+                robot.sector = self.determine_sector(robot.position)

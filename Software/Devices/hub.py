@@ -22,6 +22,9 @@ class Hub:
         #Dictionary for UWB localizations, keyed by robot id
         self.localizations = [[] for _ in range(len(self.robots))]
 
+        #List of current localizations
+        self.curr_localizations = []
+
     def receiveData(self):
         #Checking all robots for data transmission
         for robot in self.robots:
@@ -37,6 +40,7 @@ class Hub:
         full_measurements = []
         avg_positions = []
         leaders = []
+        self.curr_localizations = []
 
         for anchor in self.anchors:
             leaders = anchor.update(self.robots)
@@ -60,6 +64,8 @@ class Hub:
                 self.localizations[robot.id] = []
 
             self.localizations[robot.id].append(avg_positions[i])
+            self.curr_localizations.append(avg_positions[i])
+
 
 
     def update(self):

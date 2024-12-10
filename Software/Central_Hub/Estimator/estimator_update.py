@@ -36,7 +36,9 @@ class EstimatorUpdate:
 
         '''
         A = ((self.s.H @ _P @ self.s.H.T) + self.s.R)   # Residual covariance
-        
+        epsilon = 1e-8
+        A += np.eye(A.shape[0]) * epsilon               # Regularization to avoid singular matrix
+
         K = _P @ self.s.H.T @ linalg.inv(A)             # Kalman Gain
         r = z - ẑ                                       # Residual (innovation)
         x̂ = _x̂ + K @ (r)                                # Corrected state prediction

@@ -23,7 +23,7 @@ class Estimator:
     
     def update(self, u: ndarray, z: ndarray):
         if self.x̂_ is None:
-            v = 1.0
+            v = 0.0001
             theta = float(u[0, 0])
         else:
             v = float(self.x̂_[3][-1])

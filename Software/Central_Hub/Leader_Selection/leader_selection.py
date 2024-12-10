@@ -8,11 +8,9 @@ class LeaderSelection:
         self.proximity_evaluation = ProximityEvaluation()
 
 
-    def update(self, robots):
+    def update(self, hub):
         # Update the leader robots based on power level
-        leader_nodes = self.power_assessment.update(robots)
+        self.power_assessment.update(hub)
 
         # No implemented yet -> factor in proximity to interesting locations in leaer selection
-        self.proximity_evaluation.update()
-
-        return leader_nodes
+        # self.proximity_evaluation.update()
