@@ -21,10 +21,11 @@ class SensorNodes:
         self.light_intensity = map.light_map[math.floor(robot.position[0])-1, math.floor(robot.position[1])-1]
 
         # Check for collisions with boundaries
+        self.button_sensor = False
 
         if robot.position[0]+robot.velocity*math.cos((robot.orientation/360)*2*math.pi) < 0 or robot.position[0]+robot.velocity*math.cos((robot.orientation/360)*2*math.pi) >= map.width-1 or robot.position[1]+robot.velocity*math.sin((robot.orientation/360)*2*math.pi) < 0 or robot.position[1]+robot.velocity*math.sin((robot.orientation/360)*2*math.pi) >= map.height-1:
             self.button_sensor = True
-            return
+            
 
         # Check for collisions with obstacles
         for obs in map.obstacles:
@@ -33,7 +34,7 @@ class SensorNodes:
                 _, rect_x, rect_y, rect_w, rect_h = obs
                 if rect_x <= robot.position[0]+robot.velocity*math.cos((robot.orientation/360)*2*math.pi) <= rect_x + rect_w and rect_y <= robot.position[1]+ robot.velocity*math.sin((robot.orientation/360)*2*math.pi) <= rect_y + rect_h:
                     self.button_sensor = True
-                    return
+                    break
 
             elif obs[0] == "circle":
                 # Check if the robot collides with the circle
@@ -41,7 +42,7 @@ class SensorNodes:
                 distance = np.sqrt((robot.position[0]+robot.velocity*math.cos((robot.orientation/360)*2*math.pi) - cx)**2 + (robot.position[1]+ robot.velocity*math.sin((robot.orientation/360)*2*math.pi) - cy)**2)
                 if distance <= r:
                     self.button_sensor = True
-                    return
+                    break
 
             elif obs[0] == "polygon":
                 # Check if the robot collides with the polygon
@@ -49,7 +50,7 @@ class SensorNodes:
                 polygon = Polygon(points)
                 if polygon.contains(Point(robot.position[0]+robot.velocity*math.cos((robot.orientation/360)*2*math.pi), robot.position[1]+ robot.velocity*math.sin((robot.orientation/360)*2*math.pi))):
                     self.button_sensor = True
-                    return
+                    break
 
         # Check for collisions with other robots within the robot's field of view (within -90° to 90° of the robot's orientation)
         # for other_robot in robots:
@@ -84,6 +85,8 @@ class SensorNodes:
         #             if -90 <= angle <= 90:
         #                 self.button_sensor = True
         #                 return  # Exit loop after detecting collision
-            
-        # If no collision is detected, reset the button sensor to False
-        self.button_sensor = False
+        
+        if self.button_sensor:
+            robot.executor.motor.state=False
+        else:
+            robot.executor.motor.state=True
