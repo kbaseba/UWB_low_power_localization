@@ -16,7 +16,7 @@
 
 **Final Report:**
 
-- Link: 
+- Link:
 
 ## Project Description
 
