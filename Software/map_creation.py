@@ -21,7 +21,9 @@ class Map:
         if light_variation:
             self.generate_light_intensity()
         # self.fig, (self.ax1, self.ax2, self.ax3, self.ax4) = plt.subplots(1, 4, figsize=(20, 5))
-        self.fig, (self.ax1, self.ax2, self.ax3) = plt.subplots(1, 3, figsize=(15, 5))
+        # self.fig, (self.ax1, self.ax2, self.ax3, self.ax4) = plt.subplots(1, 4, figsize=(20, 5))
+        self.fig, ((self.ax1, self.ax2), (self.ax3, self.ax4)) = plt.subplots(2, 2, figsize=(10, 10))
+
 
         
 
@@ -206,11 +208,11 @@ class Map:
 
         for robot in robots:
             # Determine the marker color based on battery level
-            if 0 <= robot.power_level <= 33:
+            if 0 <= robot.power_level <= 32:
                 marker_color = 'red'
-            elif 34 <= robot.power_level <= 66:
+            elif 32 < robot.power_level <= 65:
                 marker_color = 'yellow'
-            elif 67 <= robot.power_level <= 100:
+            elif 65 < robot.power_level <= 100:
                 marker_color = 'green'
             else:
                 marker_color = 'gray'  # Fallback for invalid battery levels
@@ -221,18 +223,27 @@ class Map:
                 x_last, y_last = last_state[0, 0], last_state[1, 0]
 
                 # Plot only the most recent point
-                self.ax3.scatter(x_last, y_last, color=marker_color, s=100, label=f'Robot {robot.id} ({robot.power_level}%)')
-
-
+                # self.ax3.scatter(x_last, y_last, color=marker_color, s=100, label=f'Robot {robot.id} ({robot.power_level}%)')
+                
+                # Annotate the power level next to the dot
+                self.ax3.text(x_last, y_last, f'{int(robot.power_level)}%', fontsize=10, color=marker_color)
+        
+        # Calculate the average percentage of time spent in low power
+        if robots:
+            low_power_percentages = [
+                robot.time_spent_low_power / (robot.time_spent_active + robot.time_spent_low_power) * 100
+                for robot in robots if robot.time_spent_active + robot.time_spent_low_power > 0
+            ]
+            average_low_power_percentage = sum(low_power_percentages) / len(low_power_percentages) if low_power_percentages else 0
+        else:
+            average_low_power_percentage = 0
 
         for x,y in hub.collisions:
             self.ax1.plot(x, y, 'o', markersize=2, color='red')
             self.ax2.plot(x, y, 'o', markersize=2, color='red')
 
         for position in hub.curr_localizations:
-            
             self.ax1.plot(position[0], position[1], 'o', markersize=2, color='green')
-
 
         # Set self.axis limits and title
         self.ax1.set_xlim(0, self.width)
@@ -245,11 +256,17 @@ class Map:
 
         self.ax3.set_xlim(0, self.width)
         self.ax3.set_ylim(0, self.height)
-        self.ax3.set_title("Node Battery Level")
+        self.ax3.set_title(f"Avg. Low Power: {average_low_power_percentage:.2f}%")
 
-        # frontier = FrontierIdentification(self.height, self.width, hub=hub, robot=robots[0])
-        # frontier.update()
-        # self.ax4.imshow(frontier.map_matrix, cmap='magma', interpolation='nearest')
-        # self.ax3.set_xlim(0, self.width)
-        # self.ax3.set_ylim(0, self.height)
-        # self.ax3.set_title("Node Battery Level")
+        frontier = FrontierIdentification(self.height, self.width, hub=hub, robot=robots[0])
+        frontier.update()
+        self.ax4.imshow(frontier.map_matrix, cmap='magma', interpolation='nearest')
+        self.ax3.set_xlim(0, self.width)
+        self.ax3.set_ylim(0, self.height)
+        # Calculate map discovery percentage
+        shape = np.shape(frontier.map_matrix)
+        #print(f"Shape: {shape}")
+        map_discovery = np.count_nonzero(frontier.map_matrix) / (shape[0] * shape[1]) * 100
+
+        # Set the title with the formatted percentage
+        self.ax4.set_title(f"Map Coverage Percentage: {map_discovery:.2f}%")
