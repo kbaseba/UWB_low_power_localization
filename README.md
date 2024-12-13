@@ -6,17 +6,17 @@
 
 **Teaser Trailer:**
 
-- video link:
-- slides link:
+- video link: [Teaser Trailer Video](https://drive.google.com/file/d/1NqVSRKgPGOlBpSH2c5ZiYteqhftA8bAO/view?usp=sharing)
+- slides link: [Teaser Trailer Slides](https://drive.google.com/file/d/1Ohd6Mz0xrf-abUZ1H6qgpHvoQS4ExkJc/view?usp=sharing)
 
 **Final Presentation:**
 
-- video link:
-- slides link:
+- video link: [Final Presentation Video](https://drive.google.com/file/d/1IQD6iAC3c13g_61y9Lsj6MBZReiD89Qw/view?usp=drive_link)
+- slides link: [Final Presentation Slides](https://docs.google.com/presentation/d/1_pf4Dz9vVI_usuHNAMpIKqTfpL77DY0qCMJKGrLF9FY/edit?usp=sharing)
 
 **Final Report:**
 
-- Link:
+- Link: 
 
 ## Project Description
 
