@@ -4,7 +4,7 @@
     "num_obstacles": 20,
     "light_variation": true,
     "num_sectors": 16,
-    "total_num_sensor_nodes": 50,
+    "total_num_sensor_nodes": 100,
     "node_range": 10,
     "random_seed": 42,
     "min_power_threshold": 50.0,

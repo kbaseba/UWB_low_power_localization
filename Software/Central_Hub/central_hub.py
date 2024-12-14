@@ -6,7 +6,7 @@ from .Leader_Selection.leader_selection import LeaderSelection
 from .update_sectors import UpdateSectors
 from .Estimator.estimator import Estimator
 from .mapping import Mapping
-from .Swarm_Coordination.swarm_coordination import SwarmCoordination
+from .Swarm_Coordination.random_walk import RandomWalk
 from .map_accuracy import MapAccuracy
 
 # Class comment
@@ -23,7 +23,7 @@ class CentralHub:
 
         self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [1.0]])) for robot in self.hub.robots]
         self.mapping = Mapping(self.hub)
-        self.swarm_coordination = SwarmCoordination(self.hub)
+        self.random_walk = RandomWalk(self.hub)
 
         self.map_accuracy = MapAccuracy(self.hub, self.map)
         
@@ -53,8 +53,8 @@ class CentralHub:
             self.hub.robots[i].estimate_history.append(x̂)
 
         self.mapping.low_power_update()
-        self.swarm_coordination.update(self.map)
 
+        self.random_walk.update(self.map)
 
         # Extract robot positions
         sensor_node_positions = [robot.position for robot in self.hub.robots]
