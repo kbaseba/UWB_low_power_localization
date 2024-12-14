@@ -41,10 +41,14 @@ def update_config(entries, config_path):
 def start_simulation(entries, config_path):
 
     update_config(entries, config_path)
-    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R = simulation_configuration_setup()
+    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics = simulation_configuration_setup()
     np.random.seed(random_seed)
-    simulator = Simulator(map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
-    simulator.update()
+    simulator = Simulator(map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics)
+    
+    if plot_metrics:
+        simulator.run(plot_metrics)
+    else:
+        simulator.update()
 
 # Function to restart the simulation
 def restart_simulation():
