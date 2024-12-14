@@ -20,17 +20,13 @@ class CentralHub:
         self.sectors, self.hub = self.sector_assignment.update()
         self.update_sectors = UpdateSectors(self.sectors, self.hub)
 
-        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [0.0]])) for robot in self.hub.robots]
+        self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [1.0]])) for robot in self.hub.robots]
         self.mapping = Mapping(self.hub)
         self.swarm_coordination = SwarmCoordination(self.hub)
         
     def update(self, frame=None):
         self.update_sectors.update()    # Update the sector for each non-leader based on current position
         self.leader_selection.update(self.hub)
-
-        # for robot in self.hub.robots:
-        #     if robot.role == "leader":
-        #         print(f"Leader ID: {robot.id}, Sector: {robot.sector}, Power Level: {robot.power_level}")
 
         for robot in self.hub.robots:
             if robot.mode == "active":
@@ -66,19 +62,7 @@ class CentralHub:
         # Extract hub position
         hub_position = self.hub.position
 
-        # Step 5: Print leader nodes with their IDs and power levels
-        # print("Leader Nodes:")
-        # for sector, leader_id in self.leader_nodes.items():
-        #     if leader_id is not None:
-        #         # Find the corresponding robot object
-        #         leader_robot = next(robot for robot in self.hub.robots if robot.id == leader_id)
-        #         print(f"Sector: {sector}, Leader ID: {leader_robot.id}, Power Level: {leader_robot.power_level}")
-        #     else:
-        #         print(f"Sector: {sector}, No leader assigned")
-
-        
-
-        
+        # Update the map
         self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
 
 

@@ -19,7 +19,7 @@ class UWBLocalization:
         Args:
             robot (object): The robot object being updated.
         """
-        if robot.role == "leader" and robot.power_level > robot.power_threshold[0]:
+        if robot.role == "leader" and robot.power_level > robot.power_threshold[0] and (robot.power_level - self.power_consum) >= 0:
             # Leader robots send UWB signals and consume power
             robot.power_level -= self.power_consum
             robot.role = "non-leader"
