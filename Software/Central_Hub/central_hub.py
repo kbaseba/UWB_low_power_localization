@@ -7,6 +7,7 @@ from .update_sectors import UpdateSectors
 from .Estimator.estimator import Estimator
 from .mapping import Mapping
 from .Swarm_Coordination.swarm_coordination import SwarmCoordination
+from .map_accuracy import MapAccuracy
 
 # Class comment
 class CentralHub:
@@ -23,6 +24,8 @@ class CentralHub:
         self.estimators = [Estimator(dt, Q, R, np.array([[robot.position[0]], [robot.position[1]], [robot.orientation], [1.0]])) for robot in self.hub.robots]
         self.mapping = Mapping(self.hub)
         self.swarm_coordination = SwarmCoordination(self.hub)
+
+        self.map_accuracy = MapAccuracy(self.hub, self.map)
         
     def update(self, frame=None):
         self.update_sectors.update()    # Update the sector for each non-leader based on current position
@@ -63,6 +66,6 @@ class CentralHub:
         hub_position = self.hub.position
 
         # Update the map
-        self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position)
+        self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position, map_accuracy=self.map_accuracy)
 
 

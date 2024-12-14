@@ -156,7 +156,7 @@ class Map:
         # Apply the shadow value to the light map
         self.light_map[downsampled_mask] *= shadow_value
     
-    def update(self, sectors, robots, hub, sensor_node_positions, anchor_positions, hub_position):
+    def update(self, sectors, robots, hub, sensor_node_positions, anchor_positions, hub_position, map_accuracy):
         # Clear the axis and redraw
         self.ax1.clear()
         self.ax2.clear()
@@ -252,7 +252,8 @@ class Map:
         
         self.ax2.set_xlim(0, self.width)
         self.ax2.set_ylim(0, self.height)
-        self.ax2.set_title("Mapping")
+        
+        self.ax2.set_title(f"Map Accuracy: {map_accuracy.update():.2f}%")
 
         self.ax3.set_xlim(0, self.width)
         self.ax3.set_ylim(0, self.height)
