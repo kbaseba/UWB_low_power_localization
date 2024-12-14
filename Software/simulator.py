@@ -32,7 +32,7 @@ class Simulator:
                 manager.window.setGeometry(1000, 100, 800, 600)  # x, y, width, height
         plt.show()
 
-    def run(self, plot_metrics, num_steps=100):
+    def run(self, plot_metrics, num_steps=1000):
         """Run the simulation without animation."""
         for _ in range(num_steps):
             self.central_hub.update(plot_metrics)  # Update logic for the simulation

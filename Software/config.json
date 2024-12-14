@@ -32,5 +32,5 @@
     ],
     "Q": 1.0,
     "R": 0.01,
-    "plot_metrics": false
+    "plot_metrics": true
 }

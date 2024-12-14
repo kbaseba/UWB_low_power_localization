@@ -302,27 +302,30 @@ class Map:
     def plot_metrics(self):
         """
         Plots percent low power, map accuracy, and map coverage as three separate scatter plots.
-        Parameters:
-        - low_power_percentages: List of average low power percentages at different time steps.
-        - map_accuracy_history: List of map accuracy values at different time steps.
-        - map_coverage_history: List of map coverage values at different time steps.
         """
         fig, axes = plt.subplots(1, 3, figsize=(15, 5))  # Create 3 subplots side by side
+
         # Plot Low Power Percentages
         axes[0].scatter(range(len(self.low_power_percentages)), self.low_power_percentages, color='red')
         axes[0].set_title("Low Power Percentage Over Time")
         axes[0].set_xlabel("Time Step")
         axes[0].set_ylabel("Low Power Percentage (%)")
+        axes[0].set_ylim(0, 100)  # Set y-axis limits to 0–100
+
         # Plot Map Accuracy
         axes[1].scatter(range(len(self.map_accuracy_history)), self.map_accuracy_history, color='blue')
         axes[1].set_title("Map Accuracy Over Time")
         axes[1].set_xlabel("Time Step")
         axes[1].set_ylabel("Map Accuracy (%)")
+        axes[1].set_ylim(0, 100)  # Set y-axis limits to 0–100
+
         # Plot Map Coverage
         axes[2].scatter(range(len(self.map_coverage_history)), self.map_coverage_history, color='green')
         axes[2].set_title("Map Coverage Over Time")
         axes[2].set_xlabel("Time Step")
         axes[2].set_ylabel("Map Coverage (%)")
+        axes[2].set_ylim(0, 100)  # Set y-axis limits to 0–100
+
         # Adjust layout for clarity
         plt.tight_layout()
         plt.show()
