@@ -37,4 +37,6 @@ def simulation_configuration_setup():
     Q = np.eye(H.shape[1]) * config["Q"]
     R = np.eye(H.shape[0]) * config["R"]
 
-    return map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R
+    plot_metrics = config["plot_metrics"] 
+
+    return map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics

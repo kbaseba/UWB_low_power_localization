@@ -11,7 +11,7 @@ from .map_accuracy import MapAccuracy
 
 # Class comment
 class CentralHub:
-    def __init__(self, map, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R):
+    def __init__(self, map, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics):
         self.map = map
         self.leader_nodes = None
         self.sector_assignment = SectorAssignment(self.map.width, self.map.height, num_sectors, total_num_sensor_nodes, node_range, self.map.obstacles, 
@@ -26,6 +26,9 @@ class CentralHub:
         self.swarm_coordination = SwarmCoordination(self.hub)
 
         self.map_accuracy = MapAccuracy(self.hub, self.map)
+
+        # Plot siulatio or result metrics
+        self.plot_metrics = plot_metrics
         
     def update(self, frame=None):
         self.update_sectors.update()    # Update the sector for each non-leader based on current position
@@ -65,7 +68,10 @@ class CentralHub:
         # Extract hub position
         hub_position = self.hub.position
 
-        # Update the map
-        self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position, map_accuracy=self.map_accuracy)
-
+        if self.plot_metrics:
+            # Metrics plotting
+            self.map.calculate_metrics(self.hub.robots, map_accuracy=self.map_accuracy, hub=self.hub)
+        else:
+            # Live demo, update the map
+            self.map.update(sectors=self.sectors, robots=self.hub.robots, hub=self.hub, sensor_node_positions=sensor_node_positions, anchor_positions=anchor_position, hub_position=hub_position, map_accuracy=self.map_accuracy)
 

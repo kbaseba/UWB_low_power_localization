@@ -12,10 +12,10 @@ from matplotlib.animation import FuncAnimation
 # Class comment
 class Simulator:
     def __init__(self, map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, 
-                 node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R):
-        self.map = Map(width=map_width, height=map_height, num_obstacles=num_obstacles, light_variation=light_variation)
+                 node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics):
+        self.map = Map(plot_metrics, width=map_width, height=map_height, num_obstacles=num_obstacles, light_variation=light_variation)
         self.central_hub = CentralHub(self.map, num_sectors, total_num_sensor_nodes, node_range, 
-                                      threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
+                                      threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics)
 
     def update(self, frames=200, interval=200):
         """Create an animation of the map."""
@@ -32,13 +32,23 @@ class Simulator:
                 manager.window.setGeometry(1000, 100, 800, 600)  # x, y, width, height
         plt.show()
 
+    def run(self, plot_metrics, num_steps=100):
+        """Run the simulation without animation."""
+        for _ in range(num_steps):
+            self.central_hub.update(plot_metrics)  # Update logic for the simulation
+            
+        self.map.plot_metrics()
+
 if __name__ == "__main__":
     # Load configuration from JSON file
-    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R = simulation_configuration_setup()
+    map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, random_seed, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics = simulation_configuration_setup()
 
     # Set random seed for reproducibility
     np.random.seed(random_seed)
 
-    simulator = Simulator(map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R)
-
-    simulator.update()
+    simulator = Simulator(map_width, map_height, num_obstacles, light_variation, num_sectors, total_num_sensor_nodes, node_range, threshold, duty_cycle, efficacy, motor_power_consum, velocity, ble_power_consum, uwb_power_consum, dt, Q, R, plot_metrics)
+    
+    if plot_metrics:
+        simulator.run(plot_metrics)
+    else:
+        simulator.update()
