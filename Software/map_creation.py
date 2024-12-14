@@ -223,8 +223,8 @@ class Map:
                 marker_color = 'gray'  # Fallback for invalid battery levels
 
             # Get the most recent position
-            if len(robot.estimate_history) > 10:  # Ensure there are enough estimates
-                last_state = robot.estimate_history[-1]  # Only the most recent state
+            if len(robot.estimate_history) > 0:  # Ensure there are enough estimates
+                last_state = robot.position_history[-1]  # Only the most recent state
                 x_last, y_last = last_state[0, 0], last_state[1, 0]
 
                 # Plot only the most recent point
@@ -267,8 +267,6 @@ class Map:
         frontier = FrontierIdentification(self.height, self.width, hub=hub, robot=robots[0])
         frontier.update()
         self.ax4.imshow(frontier.map_matrix, cmap='magma', interpolation='nearest')
-        self.ax3.set_xlim(0, self.width)
-        self.ax3.set_ylim(0, self.height)
         # Calculate map discovery percentage
         shape = np.shape(frontier.map_matrix)
         #print(f"Shape: {shape}")
