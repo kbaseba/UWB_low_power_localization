@@ -225,8 +225,8 @@ class Map:
                 marker_color = 'gray'  # Fallback for invalid battery levels
 
             # Get the most recent position
-            if len(robot.estimate_history) > 10:  # Ensure there are enough estimates
-                last_state = robot.estimate_history[-1]  # Only the most recent state
+            if len(robot.estimate_history) > 0:  # Ensure there are enough estimates
+                last_state = robot.position_history[-1]  # Only the most recent state
                 x_last, y_last = last_state[0, 0], last_state[1, 0]
 
                 # Plot only the most recent point
@@ -273,7 +273,7 @@ class Map:
 
         # Update the map matrix based on robot estimate history
         for robot in robots:
-            for point in robot.estimate_history:
+            for point in robot.position_history:
                 x, y = point[0, 0], point[1, 0]
                 # Convert continuous coordinates to the fixed resolution grid
                 grid_x = min(max(round((x / self.width) * (matrix_width - 1)), 0), matrix_width - 1)
@@ -320,7 +320,7 @@ class Map:
 
         # Update the map matrix based on robot estimate history
         for robot in robots:
-            for point in robot.estimate_history:
+            for point in robot.position_history:
                 x, y = point[0, 0], point[1, 0]
                 # Convert continuous coordinates to the fixed resolution grid
                 grid_x = min(max(round((x / self.width) * (matrix_width - 1)), 0), matrix_width - 1)

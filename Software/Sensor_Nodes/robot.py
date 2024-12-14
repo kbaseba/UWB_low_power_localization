@@ -43,6 +43,7 @@ class Robot:
         self.power_threshold = threshold # Power Threshold for low power mode
         self.just_localized = False
         self.estimate_history = []
+        self.position_history = []
         self.velocity = velocity
         self.time_spent_active = 0
         self.time_spent_low_power = 0

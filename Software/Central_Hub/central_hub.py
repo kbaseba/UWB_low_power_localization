@@ -53,7 +53,13 @@ class CentralHub:
             else:
                 x̂, P, r, A = estimator.update(u=np.array((self.hub.robots[i].orientation % 360) * (np.pi / 180)).reshape(1, 1), z=None)
             
+            # Append estimate to history
             self.hub.robots[i].estimate_history.append(x̂)
+            
+            # Append true position to true position history
+            self.hub.robots[i].position_history.append(
+                np.array([[self.hub.robots[i].position[0]], [self.hub.robots[i].position[1]]])
+            )
 
         self.mapping.low_power_update()
 
