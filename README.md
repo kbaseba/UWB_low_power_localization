@@ -16,7 +16,7 @@
 
 **Final Report:**
 
-- Link:
+- Link: [Final Report Link](https://github.com/kbaseba/UWB_low_power_localization/blob/main/docs/ECE_209_Final_Paper_Part_1%20(2).pdf)
 
 ## Project Description
 
